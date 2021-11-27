@@ -20,5 +20,6 @@ Update database (PM> update-database) on Web api.
 Build and Run
 
 
-System architecture
+
 ![Architecture](Architecture.JPG)
+System architecture
