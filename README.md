@@ -21,4 +21,4 @@ Build and Run
 
 
 System architecture
-![Architecture](Architecture.jpg)
+![Architecture](Architecture.JPG)
