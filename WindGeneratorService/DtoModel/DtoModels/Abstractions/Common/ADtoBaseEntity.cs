@@ -8,7 +8,6 @@ namespace DtoModel.DtoModels.Abstractions.Common
 {
     public class ADtoBaseEntity : INotifyPropertyChanged
     {
-
         #region -Id- property
         private long _Id;
         public long Id

@@ -4,7 +4,16 @@ using System.Text;
 
 namespace RepositoryModel.RepoRequestObjectModels.Filters
 {
-    class EFilterTypes
+    public enum EFilterTypes
     {
+        Equal = 0,
+        StartWith,
+        Contain,
+        EndWith,
+        NotEqual,
+        LessThan,
+        GreaterThan,
+        LessThanOrEqual,
+        GreaterThanOrEqual
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using RepositoryModel.RepoModels.Interfaces.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RepositoryModel.RepoModels.Interfaces.WindGeneratorDevice
 {
-    interface IRepoWindGeneratorDevice
+    public interface IRepoWindGeneratorDevice : IRepoBaseEntity
     {
     }
 }

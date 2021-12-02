@@ -4,7 +4,8 @@ using System.Text;
 
 namespace DtoServiceDAL.Abstractions
 {
-    class ADtoObjectBaseDAL
+    public abstract class ADtoObjectBaseDAL
     {
+
     }
 }

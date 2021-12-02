@@ -1,8 +1,16 @@
-﻿using System;
+﻿using DtoServiceDAL.Interfaces.Role;
+using DtoServiceDAL.Interfaces.User;
+using DtoServiceDAL.Interfaces.WindGeneratorDevice;
+using DtoServiceDAL.Interfaces.WindGeneratorDevice_History;
+using System;
 
 namespace DtoServiceDAL
 {
-    public class IDtoDAL
+    public interface IDtoDAL
     {
+        IDtoRoleDAL GetRoleDAL();
+        IDtoUserDAL GetUserDAL();
+        IDtoWindGeneratorDeviceDAL GetWindGeneratorDeviceDAL();
+        IDtoWindGeneratorDevice_HistoryDAL GetWindGeneratorDevice_HistoryDAL();
     }
 }

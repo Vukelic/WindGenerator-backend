@@ -8,7 +8,6 @@ namespace RepositoryModel.RepoModels.Abstractions.Common
 {
     public abstract class ARepoBaseEntity : INotifyPropertyChanged
     {
-
         #region -Id- property
         private long _Id;
         public long Id

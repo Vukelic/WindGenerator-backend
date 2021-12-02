@@ -4,7 +4,9 @@ using System.Text;
 
 namespace RepositoryModel.RepoRequestObjectModels.Sort
 {
-    class ESortTypes
+    public enum ESortTypes
     {
+        Ascending = 0,
+        Descending = 1
     }
 }

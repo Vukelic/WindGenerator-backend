@@ -1,10 +1,12 @@
-﻿using System;
+﻿using DtoModel.DtoModels.Implementations.WindGeneratorDevice_History;
+using DtoModel.DtoResponseObjectModels.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DtoModel.DtoResponseObjectModels.WindGeneratorDevice_History
 {
-    class DtoWindGeneratorDevice_HistoryListResponse
+    public class DtoWindGeneratorDevice_HistoryListResponse : DtoResponseBase<IEnumerable<DtoWindGeneratorDevice_History>>
     {
     }
 }

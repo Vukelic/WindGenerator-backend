@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DtoModel.DtoResponseObjectModels.User
+namespace DtoModel.DtoModels.Interfaces.Common
 {
-    class DtoRoleResponse
+    public interface IDtoBaseEntity
     {
     }
 }

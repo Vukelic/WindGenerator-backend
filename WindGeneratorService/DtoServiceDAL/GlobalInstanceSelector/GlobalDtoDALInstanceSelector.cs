@@ -1,10 +1,12 @@
-﻿using System;
+﻿using DtoServiceDAL.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DtoServiceDAL.GlobalInstanceSelector
 {
-    class GlobalDtoDALInstanceSelector
+    public class GlobalDtoDALInstanceSelector
     {
+        public static Func<ADtoDAL> GetDtoDALImplementation;
     }
 }
