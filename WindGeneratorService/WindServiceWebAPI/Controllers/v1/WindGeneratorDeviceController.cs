@@ -255,7 +255,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Get(string inPaggingJson)
-        [Authorize]
+      //  [Authorize]
         [HttpGet]
         [Route("Get")]
         //POST: /api/WindGeneratorDevice/Get
@@ -313,7 +313,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Get(long id)
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         [Route("Get/{id}")]
         //POST: /api/WindGeneratorDevice/Get/{id}

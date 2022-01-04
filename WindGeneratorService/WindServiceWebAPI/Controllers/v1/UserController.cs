@@ -255,7 +255,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Get(string inPaggingJson)
-        [Authorize]
+      //  [Authorize]
         [HttpGet]
         [Route("Get")]
         //POST: /api/User/Get

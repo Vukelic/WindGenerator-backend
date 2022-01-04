@@ -41,7 +41,9 @@ namespace DataMapper.CustomMapperFramework
                     GeographicalLongitudeStr = inObj.GeographicalLongitudeStr,
                     GeographicalLongitude = inObj.GeographicalLongitude,
                     GeographicalLatitude = inObj.GeographicalLatitude,
-                    GeographicalLatitudeStr = inObj.GeographicalLatitudeStr
+                    GeographicalLatitudeStr = inObj.GeographicalLatitudeStr,
+                    City = inObj.City,
+                    Country = inObj.Country
                     // COMPLEX
                     //COMPLEX LIST
 
@@ -106,8 +108,9 @@ namespace DataMapper.CustomMapperFramework
                     GeographicalLongitudeStr = inObj.GeographicalLongitudeStr,
                     GeographicalLongitude = inObj.GeographicalLongitude,
                     GeographicalLatitude = inObj.GeographicalLatitude,
-                    GeographicalLatitudeStr = inObj.GeographicalLatitudeStr
-
+                    GeographicalLatitudeStr = inObj.GeographicalLatitudeStr,
+                    City = inObj.City,
+                    Country = inObj.Country
                     //COMPLEX LIST
                     //TODO
                     //System - specific

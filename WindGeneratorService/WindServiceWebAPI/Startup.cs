@@ -43,7 +43,7 @@ namespace WindServiceWebAPI
             #endregion
 
             #region Cors Policy
-
+            //   services.AddCors();
             services.AddCors(options =>
             {
                 options.AddPolicy(CorsPolicy, builder => builder
@@ -64,8 +64,11 @@ namespace WindServiceWebAPI
             #endregion
 
             #region Dependency injection
+            services.AddAuthorization(options =>
+            {
+            });
 
-            services.AddScoped<IRepositoryDAL, EntityFrameworkCoreDAL>(isp =>
+                services.AddScoped<IRepositoryDAL, EntityFrameworkCoreDAL>(isp =>
             {
                 return new EntityFrameworkCoreDAL(conString);
             });
@@ -90,20 +93,29 @@ namespace WindServiceWebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            //app.UseHttpsRedirection();
-
             app.UseRouting();
+             app.UseCors(CorsPolicy);
 
-            app.UseCors(CorsPolicy);
+            app.UseStaticFiles();
+            //app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
 
-           
+            //  app.UseHttpsRedirection();
+
+
+
+
+
+
+
+
             app.UseAuthentication();
 
         //    app.UseMiddleware<TokenManagerMiddleware>();
 
             app.UseAuthorization();
-                
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
             try
             {
                 DbContextOptions<WindServiceMainDbContext> options = new DbContextOptions<WindServiceMainDbContext>();

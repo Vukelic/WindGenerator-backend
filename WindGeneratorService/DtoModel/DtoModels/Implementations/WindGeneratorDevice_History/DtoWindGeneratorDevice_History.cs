@@ -137,6 +137,37 @@ namespace DtoModel.DtoModels.Implementations.WindGeneratorDevice_History
         }
         #endregion
 
+        #region -Country- property
+        private String _Country;
+        public String Country
+        {
+            get { return _Country; }
+            set
+            {
+                if (_Country != value)
+                {
+                    _Country = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -City- property
+        private String _City;
+        public String City
+        {
+            get { return _City; }
+            set
+            {
+                if (_City != value)
+                {
+                    _City = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
         //COMPLEX PROPERTIES    
 
         #region -ParentWindGeneratorDevice- property
