@@ -164,6 +164,7 @@ namespace WindServiceWebAPI.Controllers.v1
         }
         #endregion
 
+        //TODO:ADD Update basic info for wind generator device(without value-power)
         #region Put
         //  [Authorize]
         [HttpPut]
