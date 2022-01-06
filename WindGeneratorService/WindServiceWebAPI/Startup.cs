@@ -24,6 +24,7 @@ namespace WindServiceWebAPI
     public class Startup
     {
         readonly string CorsPolicy = "CorsPolicy";
+        public static long userRoleId = 0;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -158,10 +159,10 @@ namespace WindServiceWebAPI
 
                     var toRetRole = dbContext.Roles.FirstOrDefault(r => r.Name.Contains("SuperAdmin"));
                     #endregion
-
-                    #region added super-admin-user in database
-                    byte[] passwordHash;
-                    byte[] passwordSalt;
+                
+                #region added super-admin-user in database
+                        byte[] passwordHash;
+                        byte[] passwordSalt;
 
                     RepositoryUserDAL.CreatePasswordHashStatic("WindServiceAdmin!1", out passwordHash, out passwordSalt);
 
@@ -176,6 +177,29 @@ namespace WindServiceWebAPI
 
                     dbContext.Users.Add(repoUser);
                     dbContext.SaveChanges();
+                    #endregion
+
+                #region added regular-user-role in database
+
+                    var user_role = dbContext.Roles.FirstOrDefault(r => r.SystemString.Contains("{system-user-role}"));
+                    if (user_role == null)
+                    {
+                        var repoUserRole = new RepoRole
+                        {
+                            SystemString = "{system-user-role}",
+                            Name = "User",
+                            Description = "Top level user. {read only}",
+                            Active = true,
+                        };
+
+                        dbContext.Roles.Add(repoUserRole);
+                        dbContext.SaveChanges();            
+                       
+                    }
+
+                    var toRetUserRole = dbContext.Roles.FirstOrDefault(r => r.Name.Contains("User"));
+
+                    userRoleId = toRetRole.Id;
                     #endregion
                 }
             }

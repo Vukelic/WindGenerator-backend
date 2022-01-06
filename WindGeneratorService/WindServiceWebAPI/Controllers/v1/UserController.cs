@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DtoModel.DtoModels.Implementations.DtoChangeUserPassword;
 using DtoModel.DtoModels.Implementations.User;
 using DtoModel.DtoRequestObjectModels.Paging;
 using DtoModel.DtoResponseObjectModels.User;
@@ -20,6 +21,7 @@ namespace WindServiceWebAPI.Controllers.v1
         private ADtoDAL _dtoDAL { get; set; }
         private readonly IAuthorizationService _authorizationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly string _userId;
 
 
         public UserController(ADtoDAL dtoDAL, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
@@ -27,6 +29,7 @@ namespace WindServiceWebAPI.Controllers.v1
             _dtoDAL = dtoDAL;
             _authorizationService = authorizationService;
             _httpContextAccessor = httpContextAccessor;
+            _userId = httpContextAccessor.HttpContext.User.Claims.SingleOrDefault(i => i.Type == "UserId")?.Value;
         }
 
         #region Post
@@ -353,6 +356,228 @@ namespace WindServiceWebAPI.Controllers.v1
                 toRet.MessageDescription = $"Error details: {ex}";
             }
             return toRet;
+        }
+        #endregion
+
+        #region Login
+
+        [HttpPost]
+        [Route("Login")]
+        //POST: /api/Account/Login
+        public ActionResult<DtoUserResponse> Login([FromBody] DtoUser value)
+        {
+            DtoUserResponse toRet = new DtoUserResponse();
+            try
+            {
+                if (value == null)
+                {
+                    throw new Exception("Object for login not exist.");
+                }
+
+                toRet = _dtoDAL?.GetUserDAL()?.AuthenticateAsync(value.UserName, value.Password, false, 0, 0, 0);
+
+                if (toRet.Success)
+                {
+                    var user = toRet.Value;
+
+                    if (user.Susspend == true)
+                    {
+                        toRet.Success = false;
+                        toRet.Message = "Account is suspended.";
+                        return Ok(toRet);
+                    }
+
+                    if (user == null)
+                    {
+                        toRet.Success = false;
+                        toRet.Message = "Username and password do not match.";
+                        return Ok(toRet);
+                    }
+
+                   
+
+                  
+
+                   // var tokenString = GenerateJWTToken.RequestToken(toRet.Value, permissions, _tokenManagement.Secret, _tokenManagement.ExpiryTime, roleResp.Value);
+
+                   // toRet = _dtoDAL?.GetUserDAL()?.UpdateTokenAsync(toRet.Value.Id, tokenString);
+
+
+                }
+                else
+                {
+                    toRet.Success = false;
+                    toRet.Message = "Username and password do not match.";
+                    return Ok(toRet);
+                }
+            }
+            catch (Exception ex)
+            {
+                toRet.Success = false;
+                toRet.Message = "Failed executing web api service.";
+                toRet.MessageDescription = $"Error details: {ex}";
+            }
+            return Ok(toRet);
+        }
+
+        #endregion
+
+        #region Register
+        [HttpPost]
+        [Route("Register")]
+        public ActionResult<DtoUserResponse> Register([FromBody] DtoUser userDto)
+        {
+            DtoUserResponse toRet = new DtoUserResponse();
+            try
+            {
+                if (userDto == null)
+                {
+                    toRet.Success = false;
+                    toRet.Message = "User is null.";
+                    return BadRequest(toRet);
+                }
+
+                var resp = _dtoDAL?.GetUserDAL()?.FindByUsername(userDto.UserName);
+
+                if (resp.Success || resp.Value != null)
+                {
+                    toRet.Success = false;
+                    toRet.Message = "Username is existed in db.";
+                    return BadRequest(toRet);
+                }
+
+                userDto.TimeCreated = DateTime.UtcNow;
+
+                byte[] passwordHash = null;
+                byte[] passwordSalt = null;
+
+               var response = _dtoDAL?.GetUserDAL()?.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
+
+                if (response.Success)
+                {
+                    userDto.PasswordHash = passwordHash;
+                    userDto.PasswordSalt = passwordSalt;
+                    userDto.AssignRoleId = Startup.userRoleId;
+                }
+               
+
+                toRet = _dtoDAL?.GetUserDAL()?.Create(userDto);
+
+                if (toRet.Success != true)
+                {
+                    toRet.Success = false;
+                    toRet.Message = toRet.Message;
+                    toRet.MessageDescription = toRet.MessageDescription;
+                    return BadRequest(toRet);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                toRet.Success = false;
+                toRet.Message = "Failed executing web api service.";
+                toRet.MessageDescription = $"Error details: {ex}";
+            }
+            return Ok(toRet); ;
+
+        }
+        #endregion
+
+
+        #region ChangePassword
+        [HttpPost]
+        [Authorize]
+        [Route("ChangePassword")]
+        public ActionResult<DtoUserResponse> ChangePassword([FromBody] DtoChangeUserPassword userDto)
+        {
+            DtoUserResponse toRet = new DtoUserResponse();
+
+            try
+            {
+                if (userDto == null)
+                {
+                    toRet.Success = false;
+                    toRet.Message = "User is null.";
+                    return BadRequest(toRet);
+                }
+
+                if (userDto.UserId.ToString() != _userId)
+                {
+                    toRet.Success = false;
+                    toRet.Message = "User is not matched.";
+                    return BadRequest(toRet);
+                }
+
+                var userResonse = _dtoDAL?.GetUserDAL()?.Get(userDto.UserId);
+
+                if (userResonse.Success != true || userResonse.Value == null)
+                {
+                    toRet.Success = false;
+                    toRet.Message = "User is not exists in db.";
+                    return BadRequest(toRet);
+                }
+
+                var user = userResonse.Value;
+
+                var respCheckIfOldPasswordCorrect = _dtoDAL?.GetUserDAL()?.CheckIfOldPasswordCorrect(userDto.UserId, userDto.OldPassword);
+                if (respCheckIfOldPasswordCorrect.Success != true)
+                {
+                    toRet.Success = false;
+                    toRet.Message = respCheckIfOldPasswordCorrect.Message;
+                    return BadRequest(toRet);
+                }
+
+                var responseUpdatePassword = _dtoDAL?.GetUserDAL()?.UpdatePassword(userDto.UserId, userDto.NewPassword);
+                if (responseUpdatePassword.Success != true)
+                {
+                    toRet.Success = false;
+                    toRet.Message = responseUpdatePassword.Message;
+                    return BadRequest(toRet);
+
+                }
+
+
+                #region Update token
+
+                
+                //var tokenString = GenerateJWTToken.RequestToken(user, permissions, _tokenManagement.Secret, _tokenManagement.ExpiryTime, roleResp.Value);
+
+              //  toRet = _dtoDAL?.GetUserDAL()?.UpdateTokenAsync(user.Id, tokenString);
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+
+                toRet.Success = false;
+                toRet.Message = "Failed executing web api service.";
+                toRet.MessageDescription = $"Error details: {ex}";
+            }
+
+            return Ok(toRet);
+        }
+
+        #endregion
+
+        #region Logout
+        [HttpGet]
+        [Authorize]
+        [Route("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+
+            try
+            {
+              //  var response = await _tokenManager.DeactivateCurrentAsync();
+
+                if (!response) { return BadRequest("User is not match"); }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return Ok();
         }
         #endregion
 
