@@ -9,5 +9,7 @@ namespace DtoServiceDAL.Interfaces.WindGeneratorDevice
 {
     public interface IDtoWindGeneratorDeviceDAL : IDtoObjectBaseDAL<long, DtoWindGeneratorDevice, DtoWindGeneratorDeviceResponse, DtoWindGeneratorDeviceListResponse>
     {
+        DtoWindGeneratorDeviceResponse UpdateBasicInfoGenerator(DtoWindGeneratorDevice generator);
+        DtoWindGeneratorDeviceResponse UpdatePowerOnGenerator(DtoWindGeneratorDevice generator);
     }
 }

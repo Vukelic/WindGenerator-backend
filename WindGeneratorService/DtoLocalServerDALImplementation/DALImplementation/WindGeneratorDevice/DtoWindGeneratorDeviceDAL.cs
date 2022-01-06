@@ -235,6 +235,94 @@ namespace DtoLocalServerDALImplementation.DALImplementation.WindGeneratorDevice
             }
             return toRet;
         }
+
+        #endregion
+
+        #region UpdateBasicInfoGenerator
+        public DtoWindGeneratorDeviceResponse UpdateBasicInfoGenerator(DtoWindGeneratorDevice generator)
+        {
+            DtoWindGeneratorDeviceResponse toRet = new DtoWindGeneratorDeviceResponse();
+
+            try
+            {
+                bool objExist = dbService.GetWindGeneratorDeviceDAL().ObjectExist(generator?.Id ?? 0);
+                if (objExist)
+                {
+                    var dbObject = MyMapper.Convert(generator); //mapper.Map<RepoEventDirectory>(inObject);
+                    var responseObj = dbService.GetWindGeneratorDeviceDAL().UpdateBasicInfoGenerator(dbObject);
+
+                    toRet = MyMapper.Convert(responseObj); //mapper.Map<DtoEventDirectoryResponse>(responseObj);
+                    if (responseObj.Success)
+                    {
+                        var saveResponse = dbService.SaveChanges();
+                        if (!saveResponse.Success)
+                        {
+                            toRet.Success = false;
+                            toRet.Message = saveResponse.Message;
+                            toRet.MessageDescription = saveResponse.MessageDescription;
+                        }
+                    }
+
+                }
+                else
+                {
+                    toRet.Success = false;
+                    toRet.Message = string.Format("Error update WindGeneratorDevice. WindGeneratorDevice with id: {0}, not found in database.", (inObject?.Id ?? 0));
+                }
+            }
+            catch (Exception ex)
+            {
+                toRet.Success = false;
+                toRet.Message = string.Format("Error update WindGeneratorDevice.");
+                toRet.MessageDescription = "Error details: " + Environment.NewLine + ex;
+            }
+
+            return toRet;
+        }
+
+        #endregion
+
+        #region UpdatePowerOnGenerator
+        public DtoWindGeneratorDeviceResponse UpdatePowerOnGenerator(DtoWindGeneratorDevice generator)
+        {
+            DtoWindGeneratorDeviceResponse toRet = new DtoWindGeneratorDeviceResponse();
+
+            try
+            {
+                bool objExist = dbService.GetWindGeneratorDeviceDAL().ObjectExist(generator?.Id ?? 0);
+                if (objExist)
+                {
+                    var dbObject = MyMapper.Convert(generator); //mapper.Map<RepoEventDirectory>(inObject);
+                    var responseObj = dbService.GetWindGeneratorDeviceDAL().UpdatePowerOnGenerator(dbObject);
+
+                    toRet = MyMapper.Convert(responseObj); //mapper.Map<DtoEventDirectoryResponse>(responseObj);
+                    if (responseObj.Success)
+                    {
+                        var saveResponse = dbService.SaveChanges();
+                        if (!saveResponse.Success)
+                        {
+                            toRet.Success = false;
+                            toRet.Message = saveResponse.Message;
+                            toRet.MessageDescription = saveResponse.MessageDescription;
+                        }
+                    }
+
+                }
+                else
+                {
+                    toRet.Success = false;
+                    toRet.Message = string.Format("Error update WindGeneratorDevice. WindGeneratorDevice with id: {0}, not found in database.", (inObject?.Id ?? 0));
+                }
+            }
+            catch (Exception ex)
+            {
+                toRet.Success = false;
+                toRet.Message = string.Format("Error update WindGeneratorDevice.");
+                toRet.MessageDescription = "Error details: " + Environment.NewLine + ex;
+            }
+
+            return toRet;
+        } 
         #endregion
     }
 }

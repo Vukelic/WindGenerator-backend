@@ -23,5 +23,6 @@ namespace DtoServiceDAL.Interfaces.User
         DtoUserResponse GetUserWithRole(long userId);
         DtoUserResponse UpdateBasicInfoUser(DtoUser user);
         DtoUserResponse LogoutUser(long userId);
+
     }
 }

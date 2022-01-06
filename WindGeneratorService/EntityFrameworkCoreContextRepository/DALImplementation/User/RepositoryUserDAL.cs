@@ -350,7 +350,6 @@ namespace EntityFrameworkCoreContextRepository.DALImplementation.User
             {
                 user.PasswordHash = existingUser.PasswordHash;
                 user.PasswordSalt = existingUser.PasswordSalt;
-
                 var result = Update(user);
 
                 if (result.Success == false)
