@@ -185,8 +185,8 @@ namespace WindServiceWebAPI.Controllers.v1
                 }
                 value.TimeModified = DateTime.UtcNow;
 
-                toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Update(value);
-
+                //  toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Update(value);
+                toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.UpdateBasicInfoGenerator(value);
                 // #region AuthorizeAsync
                 // TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
                 //new TS_EntityResourseRequirement(EEntityType.WindGeneratorDevice.ToString(), EEntityAction.UPDATE.ToString(), id, null, EEWindGeneratorDeviceClaimConfigurationType.Advanced),
