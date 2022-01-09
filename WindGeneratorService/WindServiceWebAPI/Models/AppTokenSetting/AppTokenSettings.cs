@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WindServiceWebAPI.Models.AppTokenSettings
+namespace WindServiceWebAPI.Models.AppTokenSetting
 {
     public class AppTokenSettings
     {

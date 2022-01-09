@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DtoLocalServerDALImplementation;
+using DtoLocalServerDALImplementation.DALImplementation.User;
+using DtoServiceDAL.Interfaces.User;
 using EntityFrameworkCoreContextRepository.Context;
 using EntityFrameworkCoreContextRepository.DALImplementation;
 using EntityFrameworkCoreContextRepository.DALImplementation.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,9 +19,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using RepoServiceDAL.Interfaces;
 using RepositoryModel.RepoModels.Implementations.Role;
 using RepositoryModel.RepoModels.Implementations.User;
+using WindServiceWebAPI.Interfaces;
+using WindServiceWebAPI.Models.AppTokenSetting;
+using WindServiceWebAPI.Models.Common;
 
 namespace WindServiceWebAPI
 {
@@ -64,23 +72,51 @@ namespace WindServiceWebAPI
 
             #endregion
 
-            #region Dependency injection
-            services.AddAuthorization(options =>
+            #region JWT Token Authentication 
+
+            var authSettings = Configuration.GetSection(nameof(AppTokenSettings));
+            services.Configure<AppTokenSettings>(authSettings);
+
+            services.Configure<AppTokenSettings>(Configuration.GetSection("AppTokenSettings"));
+            var token = Configuration.GetSection("AppTokenSettings").Get<AppTokenSettings>();
+            var key = Encoding.ASCII.GetBytes(token.Secret);
+
+            services.AddAuthentication(x =>
             {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
             });
 
-                services.AddScoped<IRepositoryDAL, EntityFrameworkCoreDAL>(isp =>
-            {
-                return new EntityFrameworkCoreDAL(conString);
-            });
+            #endregion
+
+
+            #region Dependency injection           
+
+            services.AddScoped<IRepositoryDAL, EntityFrameworkCoreDAL>(isp =>
+              {
+            return new EntityFrameworkCoreDAL(conString);
+             });
             services.AddScoped<DtoServiceDAL.Abstractions.ADtoDAL, DtoLocalServiceDAL>(isp =>
             {
-                //  repoService = isp.GetService<IRepositoryDAL>();
                 return new DtoLocalServiceDAL(conString);
             });
-          //  services.AddTransient<TokenManagerMiddleware>();
-       //     services.AddTransient<ITokenManager, TokenManager>();
-         //   services.AddScoped<IDtoUserDAL, DtoUserDAL>();
+            services.AddTransient<TokenManagerMiddleware>();
+            services.AddTransient<ITokenManager, TokenManager>();
+            services.AddScoped<IDtoUserDAL, DtoUserDAL>();
             services.AddHttpContextAccessor();
 
             #endregion
@@ -95,7 +131,7 @@ namespace WindServiceWebAPI
                 app.UseDeveloperExceptionPage();
             }
             app.UseRouting();
-             app.UseCors(CorsPolicy);
+            app.UseCors(CorsPolicy);
 
             app.UseStaticFiles();
             //app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
@@ -111,7 +147,7 @@ namespace WindServiceWebAPI
 
             app.UseAuthentication();
 
-        //    app.UseMiddleware<TokenManagerMiddleware>();
+            app.UseMiddleware<TokenManagerMiddleware>();
 
             app.UseAuthorization();
 
@@ -127,7 +163,7 @@ namespace WindServiceWebAPI
                 SuperAdminInitialization(dbContext);
                 //  MonitoringSuiteInitialization(dbContext);
                 //     VirtualObjectSetInitialization(dbContext);
-              //  GlobalSettingsInitialization(dbContext);
+                //  GlobalSettingsInitialization(dbContext);
             }
             catch (Exception ex)
             {
@@ -151,7 +187,7 @@ namespace WindServiceWebAPI
                         SystemString = "{system-admin-role}",
                         Name = "SuperAdmin",
                         Description = "Top level administrator. {read only}",
-                        Active = true,                      
+                        Active = true,
                     };
 
                     dbContext.Roles.Add(repoRole);
@@ -159,10 +195,10 @@ namespace WindServiceWebAPI
 
                     var toRetRole = dbContext.Roles.FirstOrDefault(r => r.Name.Contains("SuperAdmin"));
                     #endregion
-                
-                #region added super-admin-user in database
-                        byte[] passwordHash;
-                        byte[] passwordSalt;
+
+                    #region added super-admin-user in database
+                    byte[] passwordHash;
+                    byte[] passwordSalt;
 
                     RepositoryUserDAL.CreatePasswordHashStatic("WindServiceAdmin!1", out passwordHash, out passwordSalt);
 
@@ -179,7 +215,7 @@ namespace WindServiceWebAPI
                     dbContext.SaveChanges();
                     #endregion
 
-                #region added regular-user-role in database
+                    #region added regular-user-role in database
 
                     var user_role = dbContext.Roles.FirstOrDefault(r => r.SystemString.Contains("{system-user-role}"));
                     if (user_role == null)
@@ -193,8 +229,8 @@ namespace WindServiceWebAPI
                         };
 
                         dbContext.Roles.Add(repoUserRole);
-                        dbContext.SaveChanges();            
-                       
+                        dbContext.SaveChanges();
+
                     }
 
                     var toRetUserRole = dbContext.Roles.FirstOrDefault(r => r.Name.Contains("User"));
