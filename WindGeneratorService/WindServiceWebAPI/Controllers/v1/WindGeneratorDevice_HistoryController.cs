@@ -30,7 +30,7 @@ namespace WindServiceWebAPI.Controllers.v1
         }
 
         #region Post
-        // [Authorize]
+       // [Authorize]
         [HttpPost]
         [Route("Post")]
         //POST: /api/WindGeneratorDevice_History/Post

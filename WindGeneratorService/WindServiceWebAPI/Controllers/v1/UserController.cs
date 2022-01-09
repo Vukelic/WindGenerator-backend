@@ -10,7 +10,11 @@ using DtoServiceDAL.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using WindServiceWebAPI.Interfaces;
+using WindServiceWebAPI.Models.AppTokenSetting;
+using WindServiceWebAPI.Models.Common;
 
 namespace WindServiceWebAPI.Controllers.v1
 {
@@ -22,14 +26,18 @@ namespace WindServiceWebAPI.Controllers.v1
         private readonly IAuthorizationService _authorizationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string _userId;
+        private readonly ITokenManager _tokenManager;
+        private readonly AppTokenSettings _tokenManagement;
 
 
-        public UserController(ADtoDAL dtoDAL, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
+        public UserController(IOptions<AppTokenSettings> tokenManagement, ADtoDAL dtoDAL, ITokenManager tokenManager, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
         {
             _dtoDAL = dtoDAL;
             _authorizationService = authorizationService;
             _httpContextAccessor = httpContextAccessor;
             _userId = httpContextAccessor.HttpContext.User.Claims.SingleOrDefault(i => i.Type == "UserId")?.Value;
+            _tokenManagement = tokenManagement.Value;
+            _tokenManager = tokenManager;
         }
 
         #region Post
@@ -394,13 +402,22 @@ namespace WindServiceWebAPI.Controllers.v1
                         return Ok(toRet);
                     }
 
-                   
 
-                  
 
-                   // var tokenString = GenerateJWTToken.RequestToken(toRet.Value, permissions, _tokenManagement.Secret, _tokenManagement.ExpiryTime, roleResp.Value);
+                    var roleResp = _dtoDAL?.GetRoleDAL()?.Get(user.AssignRoleId.Value);
 
-                   // toRet = _dtoDAL?.GetUserDAL()?.UpdateTokenAsync(toRet.Value.Id, tokenString);
+                    if (!roleResp.Success)
+                    {
+                        toRet.Success = false;
+                        toRet.Message = "Not found role.";
+                        return Ok(toRet);
+                    }
+
+
+
+                    var tokenString = GenerateJWTToken.RequestToken(toRet.Value, roleResp.Value, _tokenManagement.Secret, _tokenManagement.ExpiryTime);
+
+                    toRet = _dtoDAL?.GetUserDAL()?.UpdateTokenAsync(toRet.Value.Id, tokenString);
 
 
                 }
@@ -536,13 +553,22 @@ namespace WindServiceWebAPI.Controllers.v1
 
                 }
 
+                var roleResp = _dtoDAL?.GetRoleDAL()?.Get(user.AssignRoleId.Value);
+
+                if (!roleResp.Success)
+                {
+                    toRet.Success = false;
+                    toRet.Message = "Not found role.";
+                    return Ok(toRet);
+                }
+
 
                 #region Update token
 
-                
-                //var tokenString = GenerateJWTToken.RequestToken(user, permissions, _tokenManagement.Secret, _tokenManagement.ExpiryTime, roleResp.Value);
 
-              //  toRet = _dtoDAL?.GetUserDAL()?.UpdateTokenAsync(user.Id, tokenString);
+                var tokenString = GenerateJWTToken.RequestToken(user, roleResp.Value, _tokenManagement.Secret, _tokenManagement.ExpiryTime);
+
+                toRet = _dtoDAL?.GetUserDAL()?.UpdateTokenAsync(user.Id, tokenString);
                 #endregion
 
             }
@@ -568,7 +594,7 @@ namespace WindServiceWebAPI.Controllers.v1
 
             try
             {
-              //  var response = await _tokenManager.DeactivateCurrentAsync();
+                var response = await _tokenManager.DeactivateCurrentAsync();
 
                 if (!response) { return BadRequest("User is not match"); }
             }

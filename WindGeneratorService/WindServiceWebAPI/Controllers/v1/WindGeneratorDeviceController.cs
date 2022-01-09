@@ -30,7 +30,7 @@ namespace WindServiceWebAPI.Controllers.v1
         }
 
         #region Post
-        // [Authorize]
+        [Authorize]
         [HttpPost]
         [Route("Post")]
         //POST: /api/WindGeneratorDevice/Post
@@ -81,7 +81,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Delete
-        //  [Authorize]
+        [Authorize]
         [HttpDelete]
         [Route("Delete/{id}")]
         //POST: /api/WindGeneratorDevice/Delete
@@ -166,7 +166,7 @@ namespace WindServiceWebAPI.Controllers.v1
 
         //TODO:ADD Update basic info for wind generator device(without value-power)
         #region Put
-        //  [Authorize]
+        [Authorize]
         [HttpPut]
         [Route("Put/{id}")]
         //POST: /api/WindGeneratorDevice/Put/{id}
@@ -256,7 +256,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Get(string inPaggingJson)
-      //  [Authorize]
+        [Authorize]
         [HttpGet]
         [Route("Get")]
         //POST: /api/WindGeneratorDevice/Get
@@ -314,7 +314,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Get(long id)
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         [Route("Get/{id}")]
         //POST: /api/WindGeneratorDevice/Get/{id}

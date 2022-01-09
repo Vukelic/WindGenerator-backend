@@ -267,7 +267,7 @@ namespace DtoLocalServerDALImplementation.DALImplementation.WindGeneratorDevice
                 else
                 {
                     toRet.Success = false;
-                    toRet.Message = string.Format("Error update WindGeneratorDevice. WindGeneratorDevice with id: {0}, not found in database.", (inObject?.Id ?? 0));
+                    toRet.Message = string.Format("Error update WindGeneratorDevice. WindGeneratorDevice with id: {0}, not found in database.", (generator?.Id ?? 0));
                 }
             }
             catch (Exception ex)
@@ -311,7 +311,7 @@ namespace DtoLocalServerDALImplementation.DALImplementation.WindGeneratorDevice
                 else
                 {
                     toRet.Success = false;
-                    toRet.Message = string.Format("Error update WindGeneratorDevice. WindGeneratorDevice with id: {0}, not found in database.", (inObject?.Id ?? 0));
+                    toRet.Message = string.Format("Error update WindGeneratorDevice. WindGeneratorDevice with id: {0}, not found in database.", (generator?.Id ?? 0));
                 }
             }
             catch (Exception ex)
