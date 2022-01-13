@@ -223,19 +223,20 @@ namespace EntityFrameworkCoreContextRepository.DALImplementation.User
 
         public static bool VerifyPasswordStatic(string password)
         {
-            Regex rex = new Regex(@"^(?=.*[A-Z])(?=.*\d).{8,30}$");
-            return rex.IsMatch(password);
+            //Regex rex = new Regex(@"^(?=.*[A-Z])(?=.*\d).{8,30}$");
+            //return rex.IsMatch(password);
+            return true;
         }
         #endregion
 
         #region VerifyPasswordHash
         public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
-            if (password == null) throw new ArgumentNullException("password");
-            if (!VerifyPassword(password)) throw new ArgumentException("Value must have min 8 characters and max 30 it must contains 1 upper case and 1 number!", "password");
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
-            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+            if (password == null) return false;
+          //  if (!VerifyPassword(password)) throw new ArgumentException("Value must have min 8 characters and max 30 it must contains 1 upper case and 1 number!", "password");
+            if (string.IsNullOrWhiteSpace(password)) return false;
+            if (storedHash.Length != 64) return false;
+            if (storedSalt.Length != 128) return false;
 
             using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {

@@ -32,7 +32,6 @@ namespace WindServiceWebAPI
     public class Startup
     {
         readonly string CorsPolicy = "CorsPolicy";
-        public static long userRoleId = 0;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -235,7 +234,6 @@ namespace WindServiceWebAPI
 
                     var toRetUserRole = dbContext.Roles.FirstOrDefault(r => r.Name.Contains("User"));
 
-                    userRoleId = toRetRole.Id;
                     #endregion
                 }
             }

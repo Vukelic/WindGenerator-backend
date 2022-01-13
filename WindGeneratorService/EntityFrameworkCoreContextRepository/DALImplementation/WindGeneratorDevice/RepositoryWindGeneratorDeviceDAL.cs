@@ -60,7 +60,7 @@ namespace EntityFrameworkCoreContextRepository.DALImplementation.WindGeneratorDe
                 {
                     dbObj.ValueDec = generator.ValueDec;
                     dbObj.ValueStr = generator.ValueStr;
-                
+                    dbObj.TimeModified = DateTime.UtcNow;
                     toRet.Success = true;
                     toRet.Value = dbObj;
                 }

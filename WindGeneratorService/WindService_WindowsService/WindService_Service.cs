@@ -1,5 +1,6 @@
 ﻿using DtoLocalServerDALImplementation;
 using DtoModel.DtoModels.Implementations.WindGeneratorDevice;
+using DtoModel.DtoModels.Implementations.WindGeneratorDevice_History;
 using DtoServiceDAL.Abstractions;
 using DtoServiceDAL.GlobalInstanceSelector;
 using System;
@@ -41,8 +42,14 @@ namespace WindService_WindowsService
             {
                 return new DtoLocalServiceDAL(connectionString);
             };
+            InitializeClass();
+           
         }
 
+        private void InitializeClass()
+        {
+            WindGenerators = GetWindGenerators();
+        }
 
         public void OnDebug()
         {
@@ -82,6 +89,7 @@ namespace WindService_WindowsService
         }
 
         //Threads functions
+        //add new and add history
         private void GetGeneratorsInfo()
         {
             while (!_stop)
@@ -93,7 +101,18 @@ namespace WindService_WindowsService
                     foreach (var windGenerator in tmpWindGenerators)
                     {
                         WeatherModel weatherModel = GetWeatherInformationForGenerator(windGenerator);
-                        //TODO: pozvati weather api za svaki wind generator
+                        if (weatherModel != null)
+                        {
+                            var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed);
+                            windGenerator.ValueDec = (decimal)wind_power;
+                            windGenerator.ValueStr = wind_power.ToString();
+                            windGenerator.TimeCreated = DateTime.UtcNow;
+
+
+                            var successfulCurrent = Update_WindGenerator_CurrentPower(windGenerator);
+
+                            var successfulHistory = Add_HistoryWindGenerator(windGenerator);
+                        }
                     }
 
                     lock (WindGenerators)
@@ -107,6 +126,7 @@ namespace WindService_WindowsService
 
         }
 
+        //add new generators
         private void CheckForNewGenerators()
         {
             while (!_stop)
@@ -120,7 +140,17 @@ namespace WindService_WindowsService
                         foreach (var newGenerator in newGeneratorsList)
                         {
                             WeatherModel weatherModel =  GetWeatherInformationForGenerator(newGenerator);
-                            //TODO: pozvati weather api za svaki novi generator...
+
+                            if (weatherModel != null)
+                            {
+                                var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed);
+                                newGenerator.ValueDec = (decimal)wind_power;
+                                newGenerator.ValueStr = wind_power.ToString();
+                                newGenerator.TimeCreated = DateTime.UtcNow;
+
+                                var successful = Update_WindGenerator_CurrentPower(newGenerator);
+                                var successfulHistory = Add_HistoryWindGenerator(newGenerator);
+                            }
                         }
                         //WindGenerators.AddRange(newGeneratorsList);
                     }
@@ -146,7 +176,96 @@ namespace WindService_WindowsService
         //Work with WeatherApi functions
         private WeatherModel GetWeatherInformationForGenerator(DtoWindGeneratorDevice newGenerator)
         {
-            return WeatherProcessor.LoadWeather(newGenerator.GeographicalLatitude.ToString(), newGenerator.GeographicalLongitude.ToString()).Result;
+            WeatherModel toRet = null;
+            try
+            {
+                toRet = WeatherProcessor.LoadWeather(newGenerator.GeographicalLatitude.ToString(), newGenerator.GeographicalLongitude.ToString()).Result;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return toRet;
+        }
+
+        //Calculate wind power
+        private double Calculate_WindPower(double Wind_Speed)
+        {
+            double toRet = 0;
+            const double p_normal = 103.44;
+            const double ro = 1.293;
+            const double A = 80;
+
+            if(Wind_Speed < 3)
+            {
+                toRet = 0;
+            }else if (Wind_Speed >= 3 && Wind_Speed <= 10)
+            {
+                toRet = 0.5 * A * ro * Math.Pow(Wind_Speed, 3);
+            }
+            else if (Wind_Speed >= 10 && Wind_Speed <= 20)
+            {
+                toRet = p_normal;
+            }
+            else if (Wind_Speed >= 20)
+            {
+                toRet = 0;
+            }
+            else
+            {
+                // default value 0
+            }
+
+            Math.Round(toRet, 2);
+            return toRet;
+        }
+        
+        //add wind power in database
+        private bool Update_WindGenerator_CurrentPower(DtoWindGeneratorDevice windGenerator)
+        {
+            ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
+
+            if (windGenerator != null)
+            {
+                var windGeneratorResponse = dtoDal?.GetWindGeneratorDeviceDAL()?.UpdatePowerOnGenerator(windGenerator);
+
+                if(windGeneratorResponse != null && windGeneratorResponse.Success)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool Add_HistoryWindGenerator(DtoWindGeneratorDevice windGenerator)
+        {
+            ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
+
+            if (windGenerator != null)
+            {
+                var historyWindGenerator = new DtoWindGeneratorDevice_History();
+                historyWindGenerator.TimeCreated = DateTime.UtcNow;
+                historyWindGenerator.GeographicalLatitude = windGenerator.GeographicalLatitude;
+                historyWindGenerator.GeographicalLatitudeStr = windGenerator.GeographicalLatitudeStr;
+                historyWindGenerator.GeographicalLongitude = windGenerator.GeographicalLongitude;
+                historyWindGenerator.GeographicalLongitudeStr = windGenerator.GeographicalLongitudeStr;
+                historyWindGenerator.Country = windGenerator.Country;
+                historyWindGenerator.City = windGenerator.City;
+                historyWindGenerator.Description = windGenerator.Description;
+                historyWindGenerator.ParentWindGeneratorDeviceId = windGenerator.Id;
+                historyWindGenerator.ValueDec = windGenerator.ValueDec;
+                historyWindGenerator.ValueStr = windGenerator.ValueStr;
+                historyWindGenerator.Name = windGenerator.Name;
+
+
+                var windGeneratorResponse = dtoDal?.GetWindGeneratorDevice_HistoryDAL()?.Create(historyWindGenerator);
+
+                if (windGeneratorResponse != null && windGeneratorResponse.Success)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }//[Class]
 }//[Namespace]

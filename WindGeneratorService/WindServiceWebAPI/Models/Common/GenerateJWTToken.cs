@@ -24,6 +24,7 @@ namespace WindServiceWebAPI.Models.Common
                 SubjectClaims.AddClaim(new Claim("RoleId", user.AssignRoleId.ToString()));
                 SubjectClaims.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
                 SubjectClaims.AddClaim(new Claim(ClaimTypes.Role, role.Name));
+                SubjectClaims.AddClaim(new Claim("roleSettingsKey", role.SystemString));
 
 
                 var tokenDescriptor = new SecurityTokenDescriptor
