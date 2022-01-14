@@ -43,7 +43,8 @@ namespace DataMapper.CustomMapperFramework
                     GeographicalLatitude = inObj.GeographicalLatitude,
                     GeographicalLatitudeStr = inObj.GeographicalLatitudeStr,
                     City = inObj.City,
-                    Country = inObj.Country
+                    Country = inObj.Country,
+                    ParentWindGeneratorDeviceId = inObj.ParentWindGeneratorDeviceId
                     // COMPLEX
                     //COMPLEX LIST
 
@@ -110,7 +111,10 @@ namespace DataMapper.CustomMapperFramework
                     GeographicalLatitude = inObj.GeographicalLatitude,
                     GeographicalLatitudeStr = inObj.GeographicalLatitudeStr,
                     City = inObj.City,
-                    Country = inObj.Country
+                    Country = inObj.Country,
+                    ParentWindGeneratorDeviceId = inObj.ParentWindGeneratorDeviceId,
+                    ValueStr = inObj.ValueStr,
+                    ValueDec = inObj.ValueDec,
                     //COMPLEX LIST
                     //TODO
                     //System - specific

@@ -470,23 +470,34 @@ namespace WindServiceWebAPI.Controllers.v1
 
                var response = _dtoDAL?.GetUserDAL()?.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
 
-                if (response.Success)
+                var responseRole = _dtoDAL?.GetRoleDAL()?.GetList();
+                if(responseRole != null && responseRole.Success && responseRole.Value != null)
                 {
-                    userDto.PasswordHash = passwordHash;
-                    userDto.PasswordSalt = passwordSalt;
-                    userDto.AssignRoleId = Startup.userRoleId;
+                    var userRole = responseRole.Value.FirstOrDefault(o => o.SystemString == "{system-user-role}");
+
+                    if(userRole != null)
+                    {
+                        if (response.Success)
+                        {
+                            userDto.PasswordHash = passwordHash;
+                            userDto.PasswordSalt = passwordSalt;
+                            userDto.AssignRoleId = userRole.Id;
+                        }
+
+
+                        toRet = _dtoDAL?.GetUserDAL()?.Create(userDto);
+
+                        if (toRet.Success != true)
+                        {
+                            toRet.Success = false;
+                            toRet.Message = toRet.Message;
+                            toRet.MessageDescription = toRet.MessageDescription;
+                            return BadRequest(toRet);
+                        }
+                    }
                 }
+
                
-
-                toRet = _dtoDAL?.GetUserDAL()?.Create(userDto);
-
-                if (toRet.Success != true)
-                {
-                    toRet.Success = false;
-                    toRet.Message = toRet.Message;
-                    toRet.MessageDescription = toRet.MessageDescription;
-                    return BadRequest(toRet);
-                }
 
             }
             catch (Exception ex)

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindServiceWebAPI", "WindServiceWebAPI\WindServiceWebAPI.csproj", "{F08E7F4C-6CC0-4B0E-AFAB-AB1DA654A50D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindServiceWebAPI", "WindServiceWebAPI\WindServiceWebAPI.csproj", "{F08E7F4C-6CC0-4B0E-AFAB-AB1DA654A50D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dto", "Dto", "{5906CC31-1700-4963-91E1-AF423318874F}"
 EndProject
@@ -15,29 +15,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceLayer", "ServiceLaye
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessLayer", "DataAccessLayer", "{BCBD49F4-C761-453C-A80F-B43F013B4D0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepoServiceDAL", "RepoServiceDAL\RepoServiceDAL.csproj", "{739390A8-5513-4DDE-AE33-93253B7E9B70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepoServiceDAL", "RepoServiceDAL\RepoServiceDAL.csproj", "{739390A8-5513-4DDE-AE33-93253B7E9B70}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepositoryDALImplementation", "RepositoryDALImplementation", "{C70DA406-5A33-427B-8059-4CAC02D4130D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCoreContextRepository", "EntityFrameworkCoreContextRepository\EntityFrameworkCoreContextRepository.csproj", "{1A64F1F6-A6DE-4450-846D-63EF3967AECA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkCoreContextRepository", "EntityFrameworkCoreContextRepository\EntityFrameworkCoreContextRepository.csproj", "{1A64F1F6-A6DE-4450-846D-63EF3967AECA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryModel", "RepositoryModel\RepositoryModel.csproj", "{430305DD-CBB5-48C2-AF24-0F3285349906}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryModel", "RepositoryModel\RepositoryModel.csproj", "{430305DD-CBB5-48C2-AF24-0F3285349906}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DtoServiceDAL", "DtoServiceDAL\DtoServiceDAL.csproj", "{BA1DB13A-88EA-4D11-A2F0-F8873F200BEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DtoServiceDAL", "DtoServiceDAL\DtoServiceDAL.csproj", "{BA1DB13A-88EA-4D11-A2F0-F8873F200BEB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DtoDALImplementation", "DtoDALImplementation", "{DAB195B5-074E-431A-A94C-6CFBB032065A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DtoModel", "DtoModel\DtoModel.csproj", "{48847926-3A6B-44D2-A6D7-659B31913603}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DtoModel", "DtoModel\DtoModel.csproj", "{48847926-3A6B-44D2-A6D7-659B31913603}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DtoLocalServerDALImplementation", "DtoLocalServerDALImplementation\DtoLocalServerDALImplementation.csproj", "{D8F77FED-0E42-4861-905C-273D52EE8538}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DtoLocalServerDALImplementation", "DtoLocalServerDALImplementation\DtoLocalServerDALImplementation.csproj", "{D8F77FED-0E42-4861-905C-273D52EE8538}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMapper", "DataMapper\DataMapper.csproj", "{F61665B1-E5EB-4B70-B03C-652DE13B3543}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataMapper", "DataMapper\DataMapper.csproj", "{F61665B1-E5EB-4B70-B03C-652DE13B3543}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{2EF8EDF7-315B-4825-B57E-295730537BF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonModels", "CommonModels\CommonModels.csproj", "{3CCDDDD0-043B-4119-A9F1-09DA800DA19D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonModels", "CommonModels\CommonModels.csproj", "{3CCDDDD0-043B-4119-A9F1-09DA800DA19D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{D29EB579-EC8F-42C7-86D9-C3535A06697D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsServices", "WindowsServices", "{F7FD089B-1AE9-4BB1-B0F5-7D022C3A110E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindService_WindowsService", "WindService_WindowsService\WindService_WindowsService.csproj", "{E5834F2C-32A1-418A-8D69-F81C03F35055}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +85,10 @@ Global
 		{3CCDDDD0-043B-4119-A9F1-09DA800DA19D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CCDDDD0-043B-4119-A9F1-09DA800DA19D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CCDDDD0-043B-4119-A9F1-09DA800DA19D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5834F2C-32A1-418A-8D69-F81C03F35055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5834F2C-32A1-418A-8D69-F81C03F35055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5834F2C-32A1-418A-8D69-F81C03F35055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5834F2C-32A1-418A-8D69-F81C03F35055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +105,7 @@ Global
 		{D8F77FED-0E42-4861-905C-273D52EE8538} = {DAB195B5-074E-431A-A94C-6CFBB032065A}
 		{F61665B1-E5EB-4B70-B03C-652DE13B3543} = {8F1BA257-D461-4C6A-990A-0B07C21E4BB4}
 		{3CCDDDD0-043B-4119-A9F1-09DA800DA19D} = {2EF8EDF7-315B-4825-B57E-295730537BF2}
+		{E5834F2C-32A1-418A-8D69-F81C03F35055} = {F7FD089B-1AE9-4BB1-B0F5-7D022C3A110E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CD53A110-FA3A-4E27-A98C-7B23AD0D0730}
