@@ -10,14 +10,16 @@ namespace WindService_WindowsService
         {
 
             //OnDebug
-            ApiHelper.InitializeClient();
-            var totalSafetySrc = new WindService_Service();
-            totalSafetySrc.OnDebug();
+            //ApiHelper.InitializeClient();
+            //var totalSafetySrc = new WindService_Service();
+            //totalSafetySrc.OnDebug();
 
             //Default
-            //ServiceBase.Run(new WindService_Service()); 
+            ServiceBase.Run(new WindService_Service()); 
 
 
         }
+
+       
     }
 }

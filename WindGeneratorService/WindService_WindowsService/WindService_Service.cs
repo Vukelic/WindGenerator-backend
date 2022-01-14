@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
@@ -20,6 +21,7 @@ namespace WindService_WindowsService
 {
     partial class WindService_Service : ServiceBase
     {
+        string path = "C:\\ProgramData\\windService\\debug.txt";
         string connectionString = @"Server=DESKTOP-H4344E1\SQLEXPRESS;Database=wind-service-database;Trusted_Connection=True;MultipleActiveResultSets=true";
 
         Thread checkForNewGenerators_Thread;
@@ -37,13 +39,18 @@ namespace WindService_WindowsService
         public WindService_Service()
         {
             InitializeComponent();
+
+            ApiHelper.InitializeClient();
+
             //DTO dal implementation
             GlobalDtoDALInstanceSelector.GetDtoDALImplementation = () =>
             {
                 return new DtoLocalServiceDAL(connectionString);
             };
             InitializeClass();
+
            
+
         }
 
         private void InitializeClass()
@@ -53,23 +60,47 @@ namespace WindService_WindowsService
 
         public void OnDebug()
         {
+            if (!Directory.Exists("C:\\ProgramData\\windService"))
+            {
+                Directory.CreateDirectory("C:\\ProgramData\\windService");
+            }
+            string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            File.AppendAllText(path, $"OnDebug service, {dateStr}.\n");
+
             OnStart(null);
             System.Threading.Thread.CurrentThread.Join();
         }
 
         protected override void OnStart(string[] args)
         {
+            if (!Directory.Exists("C:\\ProgramData\\windService"))
+            {
+                Directory.CreateDirectory("C:\\ProgramData\\windService");
+            }
+            string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            File.AppendAllText(path, $"\n\nOnStart service, {dateStr}.\n");
+            //using (StreamWriter sw = (File.Exists(path)) ? File.AppendText(path) : File.CreateText(path))
+            //{
+            //    sw.WriteLine("Successfully onStart!");
+            //}
             StartProcesses();
+            
         }
 
         protected override void OnStop()
         {
+            string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            File.AppendAllText(path, $"OnStop service, {dateStr}.\n");
+
             StopProcesses();
         }
 
         //Start & Stop processes
         private void StopProcesses()
         {
+            string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            File.AppendAllText(path, $"StopProcesses service, {dateStr}.\n");
+
             _stop = true;
 
             // checkForNewGenerators_Thread = null;
@@ -95,30 +126,45 @@ namespace WindService_WindowsService
             while (!_stop)
             {
 
-                var tmpWindGenerators = GetWindGenerators();
-                if (tmpWindGenerators != null)
+                string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                File.AppendAllText(path, $"GetGeneratorsInfo, {dateStr}.\n");
+
+                try
                 {
-                    foreach (var windGenerator in tmpWindGenerators)
+                    var tmpWindGenerators = GetWindGenerators();
+                    this.Debug_Test($"GetGeneratorsInfo tmpWindGenerators count: {tmpWindGenerators?.Count.ToString() ?? "null"} ");
+                    if (tmpWindGenerators != null)
                     {
-                        WeatherModel weatherModel = GetWeatherInformationForGenerator(windGenerator);
-                        if (weatherModel != null)
+                        foreach (var windGenerator in tmpWindGenerators)
                         {
-                            var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed);
-                            windGenerator.ValueDec = (decimal)wind_power;
-                            windGenerator.ValueStr = wind_power.ToString();
-                            windGenerator.TimeCreated = DateTime.UtcNow;
+                            WeatherModel weatherModel = GetWeatherInformationForGenerator(windGenerator);
+                            
+                            if (weatherModel != null)
+                            {
+                                this.Debug_Test($"weatherModel not null GetGeneratorsInfo");
+                                var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed);
+                                windGenerator.ValueDec = (decimal)wind_power;
+                                windGenerator.ValueStr = wind_power.ToString();
+                                windGenerator.TimeCreated = DateTime.UtcNow;
 
 
-                            var successfulCurrent = Update_WindGenerator_CurrentPower(windGenerator);
+                                var successfulCurrent = Update_WindGenerator_CurrentPower(windGenerator);
+                                this.Debug_Test($"update active generator GetGeneratorsInfo,{successfulCurrent}");
+                                var successfulHistory = Add_HistoryWindGenerator(windGenerator);
+                                this.Debug_Test($"add to history generator GetGeneratorsInfo,{successfulHistory}");
+                            }
+                        }
 
-                            var successfulHistory = Add_HistoryWindGenerator(windGenerator);
+                        lock (WindGenerators)
+                        {
+                            this.Debug_Test($"lock");
+                            WindGenerators = tmpWindGenerators; //for checking new generators. 
                         }
                     }
-
-                    lock (WindGenerators)
-                    {
-                        WindGenerators = tmpWindGenerators; //for checking new generators. 
-                    }
+                }
+                catch (Exception ex)
+                {
+                    this.Debug_Test($"ERROR GetGeneratorsInfo {ex}");
                 }
 
                 Thread.Sleep(getWindGeneratorsInfo_Thread_SleepTime);
@@ -131,29 +177,45 @@ namespace WindService_WindowsService
         {
             while (!_stop)
             {
-                var tmpWindGenerators = GetWindGenerators();
-                if (tmpWindGenerators != null && WindGenerators != null)
+                string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                File.AppendAllText(path, $"CheckForNewGenerators, {dateStr}.\n");
+
+                try
                 {
-                    var newGeneratorsList = tmpWindGenerators.Where(o => WindGenerators.FirstOrDefault(i => i.Id == o.Id) == null).ToList();
-                    if (newGeneratorsList != null && newGeneratorsList.Count > 0)
+                    var tmpWindGenerators = GetWindGenerators();
+                    this.Debug_Test($"CheckForNewGenerators tmpWindGenerators count: {tmpWindGenerators?.Count.ToString() ?? "null"} ");
+                    if (tmpWindGenerators != null && WindGenerators != null)
                     {
-                        foreach (var newGenerator in newGeneratorsList)
+                        var newGeneratorsList = tmpWindGenerators.Where(o => WindGenerators.FirstOrDefault(i => i.Id == o.Id) == null).ToList();
+                        if (newGeneratorsList != null && newGeneratorsList.Count > 0)
                         {
-                            WeatherModel weatherModel =  GetWeatherInformationForGenerator(newGenerator);
-
-                            if (weatherModel != null)
+                            foreach (var newGenerator in newGeneratorsList)
                             {
-                                var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed);
-                                newGenerator.ValueDec = (decimal)wind_power;
-                                newGenerator.ValueStr = wind_power.ToString();
-                                newGenerator.TimeCreated = DateTime.UtcNow;
+                                WeatherModel weatherModel = GetWeatherInformationForGenerator(newGenerator);
 
-                                var successful = Update_WindGenerator_CurrentPower(newGenerator);
-                                var successfulHistory = Add_HistoryWindGenerator(newGenerator);
+                                if (weatherModel != null)
+                                {
+                                    this.Debug_Test($"weather model CheckForNewGenerators not null");
+                                    var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed);
+                                    newGenerator.ValueDec = (decimal)wind_power;
+                                    newGenerator.ValueStr = wind_power.ToString();
+                                    newGenerator.TimeCreated = DateTime.UtcNow;
+
+                                    var successful = Update_WindGenerator_CurrentPower(newGenerator);
+                                    this.Debug_Test($"update active generator CheckForNewGenerators ,{successful}");
+                                    var successfulHistory = Add_HistoryWindGenerator(newGenerator);
+                                    this.Debug_Test($"add to history CheckForNewGenerators,{successfulHistory}");
+
+                                }
                             }
+                            //WindGenerators.AddRange(newGeneratorsList);
                         }
-                        //WindGenerators.AddRange(newGeneratorsList);
                     }
+                }
+                catch (Exception ex)
+                {
+
+                    this.Debug_Test($"ERROR CheckForNewGenerators {ex}");
                 }
                 Thread.Sleep(checkForNewGenerators_Thread_SleepTime);
             }
@@ -167,12 +229,17 @@ namespace WindService_WindowsService
             ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
 
             var tmpGeneratorsList = dtoDal?.GetWindGeneratorDeviceDAL()?.GetList();
+            this.Debug_Test($"GetWindGenerators tmpWindGenerators count: {tmpGeneratorsList?.Value?.ToList()?.Count.ToString() ?? "null"} ");
             if (tmpGeneratorsList != null && tmpGeneratorsList.Success && tmpGeneratorsList.Value != null)
                 return tmpGeneratorsList.Value.ToList();
 
             return null;
         }
-
+        private void Debug_Test(string message)
+        {
+            string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            File.AppendAllText(path, $"{message}, {dateStr}.\n");
+        }
         //Work with WeatherApi functions
         private WeatherModel GetWeatherInformationForGenerator(DtoWindGeneratorDevice newGenerator)
         {
@@ -180,10 +247,12 @@ namespace WindService_WindowsService
             try
             {
                 toRet = WeatherProcessor.LoadWeather(newGenerator.GeographicalLatitude.ToString(), newGenerator.GeographicalLongitude.ToString()).Result;
+                Debug_Test("GetWeatherInformationForGenerator");
             }
             catch (Exception ex)
             {
-
+                string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                Debug_Test($"ERROR GetWeatherInformationForGenerator {ex}");
             }
             return toRet;
         }

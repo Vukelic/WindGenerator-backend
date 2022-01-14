@@ -12,8 +12,7 @@ namespace WindService_WindowsService.Api
     {
         public static async Task<WeatherModel> LoadWeather(string Lat, string Lon)
         {
-            //MOZDA CES OVO MORATI DA U NUGET PACKAGE MANAGERU UKUCAS DA TI INSTALIRA DODATAK ZA API
-            //Install-Package Microsoft.AspNet.WebApi.Client
+            //TODO:
             string url = $"https://api.openweathermap.org/data/2.5/onecall?lat={ Lat }&lon={ Lon }&units=metric&APPID=a2a055dbb982179b05c3eb6481fbb9db";
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
