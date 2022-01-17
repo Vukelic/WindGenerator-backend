@@ -45,30 +45,7 @@ namespace WindServiceWebAPI.Controllers.v1
                 }
                 value.TimeCreated = DateTime.UtcNow;
 
-                toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Create(value);
-
-                //#region AuthorizeAsync
-                //TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                // new TS_EntityResourseRequirement(EEntityType.WindGeneratorDevice.ToString(), EEntityAction.CREATE.ToString(), 0, null, EEWindGeneratorDeviceClaimConfigurationType.Advanced),
-                // new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.CREATE.ToString(), 0, null, EEWindGeneratorDeviceClaimConfigurationType.Basic)
-                // );
-
-                //var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.WindGeneratorDevice, value, allReq);
-
-                //if (authorizationResult.Succeeded)
-                //{
-                //    toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Create(value);
-
-                //}
-                //else if (WindGeneratorDevice.Identity.IsAuthenticated)
-                //{
-                //    return new ForbidResult();
-                //}
-                //else
-                //{
-                //    return new ChallengeResult();
-                //}
-                //#endregion
+                toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Create(value);               
             }
             catch (Exception ex)
             {
@@ -90,69 +67,7 @@ namespace WindServiceWebAPI.Controllers.v1
             DtoWindGeneratorDeviceResponse toRet = new DtoWindGeneratorDeviceResponse();
             try
             {
-                toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Delete(id);
-                //#region AuthorizeAsync
-                //TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                //new TS_EntityResourseRequirement(EEntityType.WindGeneratorDevice.ToString(), EEntityAction.DELETE.ToString(), id, null, EEWindGeneratorDeviceClaimConfigurationType.Advanced),
-                //new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.DELETE.ToString(), id, null, EEWindGeneratorDeviceClaimConfigurationType.Basic)
-                //);
-
-                //var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.WindGeneratorDevice, id, allReq);
-
-                //if (authorizationResult.Succeeded)
-                //{
-                //    var toRetWindGeneratorDevice = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Get(id);
-
-                //    if (toRetWindGeneratorDevice.Success && toRetWindGeneratorDevice.Value != null)
-                //    {
-                //        if (!string.IsNullOrEmpty(toRetWindGeneratorDevice.Value.SystemString))
-                //        {
-                //            if (toRetWindGeneratorDevice.Value.SystemString.Contains("{system-admin-WindGeneratorDevice}"))
-                //            {
-                //                return new ForbidResult();
-                //            }
-                //        }
-                //    }
-
-                //    var response = _dtoDAL?.GetWindGeneratorDeviceDAL()?.IsConnectedWithOtherEntities(id); // bool
-                //    if (response == false)
-                //    {
-                //        toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Delete(id);
-                //    }
-                //    else
-                //    {
-                //        var responseGetAll = _dtoDAL?.GetWindGeneratorDeviceDAL()?.GetAllConnectedEntities(id); // DtoWindGeneratorDeviceShortInfo[]
-                //        if (responseGetAll != null && responseGetAll.Count != 0)
-                //        {
-                //            dynamic tmpToRet = new ExpandoObject();
-                //            if (responseGetAll.Count > 100) { tmpToRet.WindGeneratorDevices = responseGetAll.GetRange(0, 100); }
-                //            else
-                //            {
-                //                tmpToRet.WindGeneratorDevices = responseGetAll;
-                //            }
-                //            //  tmpToRet.WindGeneratorDevices = responseGetAll.GetRange(0,100); //DtoWindGeneratorDeviceShortInfo[]
-                //            tmpToRet.Name = toRetWindGeneratorDevice.Value.Name;
-                //            tmpToRet.Id = toRetWindGeneratorDevice.Value.Id;
-                //            tmpToRet.Count = responseGetAll.Count;
-                //            toRet.FailedDetails = tmpToRet;
-                //            toRet.Success = false;
-                //        }
-                //        else
-                //        {
-                //            // Error, no information on connected WindGeneratorDevices. Unexpeted error
-                //        }
-                //    }
-
-                //}
-                //else if (WindGeneratorDevice.Identity.IsAuthenticated)
-                //{
-                //    return new ForbidResult();
-                //}
-                //else
-                //{
-                //    return new ChallengeResult();
-                //}
-                //#endregion
+                toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Delete(id);             
             }
             catch (Exception ex)
             {
@@ -187,63 +102,7 @@ namespace WindServiceWebAPI.Controllers.v1
 
                 //  toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Update(value);
                 toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.UpdateBasicInfoGenerator(value);
-                // #region AuthorizeAsync
-                // TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                //new TS_EntityResourseRequirement(EEntityType.WindGeneratorDevice.ToString(), EEntityAction.UPDATE.ToString(), id, null, EEWindGeneratorDeviceClaimConfigurationType.Advanced),
-                //new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.UPDATE.ToString(), id, null, EEWindGeneratorDeviceClaimConfigurationType.Basic)
-                //);
-
-                // var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.WindGeneratorDevice, value, allReq);
-
-                // if (authorizationResult.Succeeded)
-                // {
-                //     if (!string.IsNullOrEmpty(value.SystemString))
-                //     {
-                //         if (value.SystemString.Contains("{system-admin-WindGeneratorDevice}"))
-                //         {
-                //             return new ForbidResult();
-                //         }
-                //     }
-
-                //     toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Update(value);
-
-                //     #region Logout WindGeneratorDevice after edit WindGeneratorDevice
-                //     if (toRet.Success && toRet.Value != null)
-                //     {
-                //         DtoPaging dtoPaging = new DtoPaging();
-                //         dtoPaging.filters.Add("AssignWindGeneratorDeviceId", $"{toRet.Value.Id}");
-                //         dtoPaging.filtersType.Add("AssignWindGeneratorDeviceId", "eq");
-                //         var WindGeneratorDevicesResponse = _dtoDAL.GetWindGeneratorDeviceDAL().GetList(dtoPaging);
-
-                //         if (WindGeneratorDevicesResponse.Value != null && WindGeneratorDevicesResponse.Success)
-                //         {
-                //             foreach (var WindGeneratorDevice in WindGeneratorDevicesResponse.Value)
-                //             {
-                //                 // WindGeneratorDevice.WindGeneratorDeviceToken = null;
-                //                 var response = _dtoDAL.GetWindGeneratorDeviceDAL()?.LogoutWindGeneratorDevice(WindGeneratorDevice.Id);
-
-                //                 if (!response.Success || response.Value == null)
-                //                 {
-                //                     toRet.Success = false;
-                //                     toRet.Message = "Can not logout WindGeneratorDevice.";
-                //                     return toRet;
-                //                 }
-                //             }
-                //         }
-
-                //     }
-                //     #endregion
-
-                // }
-                // else if (WindGeneratorDevice.Identity.IsAuthenticated)
-                // {
-                //     return new ForbidResult();
-                // }
-                // else
-                // {
-                //     return new ChallengeResult();
-                // }
-                // #endregion
+                
             }
             catch (Exception ex)
             {
@@ -278,30 +137,6 @@ namespace WindServiceWebAPI.Controllers.v1
                     }
                 }
                 toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.GetList(inpaging);
-
-                //  #region AuthorizeAsync
-                //  TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                //new TS_EntityResourseRequirement(EEntityType.WindGeneratorDevice.ToString(), EEntityAction.READ.ToString(), 0, null, EEWindGeneratorDeviceClaimConfigurationType.Advanced),
-                //new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.READ.ToString(), 0, null, EEWindGeneratorDeviceClaimConfigurationType.Basic)
-                //);
-
-                //  var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.WindGeneratorDevice, inpaging, allReq);
-
-                //  if (authorizationResult.Succeeded)
-                //  {
-                //      toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.GetList(inpaging);
-
-
-                //  }
-                //  else if (WindGeneratorDevice.Identity.IsAuthenticated)
-                //  {
-                //      return new ForbidResult();
-                //  }
-                //  else
-                //  {
-                //      return new ChallengeResult();
-                //  }
-                //  #endregion
             }
             catch (Exception ex)
             {
@@ -323,29 +158,7 @@ namespace WindServiceWebAPI.Controllers.v1
             DtoWindGeneratorDeviceResponse toRet = new DtoWindGeneratorDeviceResponse();
             try
             {
-                toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Get(id);
-                // #region AuthorizeAsync
-                // TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                //new TS_EntityResourseRequirement(EEntityType.WindGeneratorDevice.ToString(), EEntityAction.READ.ToString(), id, null, EEWindGeneratorDeviceClaimConfigurationType.Advanced),
-                //new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.READ.ToString(), id, null, EEWindGeneratorDeviceClaimConfigurationType.Basic)
-                //);
-
-                // var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.WindGeneratorDevice, id, allReq);
-
-                // if (authorizationResult.Succeeded)
-                // {
-                //     toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Get(id);
-
-                // }
-                // else if (WindGeneratorDevice.Identity.IsAuthenticated)
-                // {
-                //     return new ForbidResult();
-                // }
-                // else
-                // {
-                //     return new ChallengeResult();
-                // }
-                // #endregion
+                toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.Get(id);               
             }
             catch (Exception ex)
             {
