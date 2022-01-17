@@ -58,28 +58,7 @@ namespace WindServiceWebAPI.Controllers.v1
 
                 toRet = _dtoDAL?.GetUserDAL()?.Create(value);
 
-                //#region AuthorizeAsync
-                //TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                // new TS_EntityResourseRequirement(EEntityType.User.ToString(), EEntityAction.CREATE.ToString(), 0, null, EEUserClaimConfigurationType.Advanced),
-                // new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.CREATE.ToString(), 0, null, EEUserClaimConfigurationType.Basic)
-                // );
-
-                //var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, value, allReq);
-
-                //if (authorizationResult.Succeeded)
-                //{
-                //    toRet = _dtoDAL?.GetUserDAL()?.Create(value);
-
-                //}
-                //else if (User.Identity.IsAuthenticated)
-                //{
-                //    return new ForbidResult();
-                //}
-                //else
-                //{
-                //    return new ChallengeResult();
-                //}
-                //#endregion
+                
             }
             catch (Exception ex)
             {
@@ -92,7 +71,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Delete
-        //  [Authorize]
+        [Authorize]
         [HttpDelete]
         [Route("Delete/{id}")]
         //POST: /api/User/Delete
@@ -102,68 +81,7 @@ namespace WindServiceWebAPI.Controllers.v1
             try
             {
                 toRet = _dtoDAL?.GetUserDAL()?.Delete(id);
-                //#region AuthorizeAsync
-                //TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                //new TS_EntityResourseRequirement(EEntityType.User.ToString(), EEntityAction.DELETE.ToString(), id, null, EEUserClaimConfigurationType.Advanced),
-                //new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.DELETE.ToString(), id, null, EEUserClaimConfigurationType.Basic)
-                //);
-
-                //var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, id, allReq);
-
-                //if (authorizationResult.Succeeded)
-                //{
-                //    var toRetUser = _dtoDAL?.GetUserDAL()?.Get(id);
-
-                //    if (toRetUser.Success && toRetUser.Value != null)
-                //    {
-                //        if (!string.IsNullOrEmpty(toRetUser.Value.SystemString))
-                //        {
-                //            if (toRetUser.Value.SystemString.Contains("{system-admin-User}"))
-                //            {
-                //                return new ForbidResult();
-                //            }
-                //        }
-                //    }
-
-                //    var response = _dtoDAL?.GetUserDAL()?.IsConnectedWithOtherEntities(id); // bool
-                //    if (response == false)
-                //    {
-                //        toRet = _dtoDAL?.GetUserDAL()?.Delete(id);
-                //    }
-                //    else
-                //    {
-                //        var responseGetAll = _dtoDAL?.GetUserDAL()?.GetAllConnectedEntities(id); // DtoUserShortInfo[]
-                //        if (responseGetAll != null && responseGetAll.Count != 0)
-                //        {
-                //            dynamic tmpToRet = new ExpandoObject();
-                //            if (responseGetAll.Count > 100) { tmpToRet.Users = responseGetAll.GetRange(0, 100); }
-                //            else
-                //            {
-                //                tmpToRet.Users = responseGetAll;
-                //            }
-                //            //  tmpToRet.Users = responseGetAll.GetRange(0,100); //DtoUserShortInfo[]
-                //            tmpToRet.Name = toRetUser.Value.Name;
-                //            tmpToRet.Id = toRetUser.Value.Id;
-                //            tmpToRet.Count = responseGetAll.Count;
-                //            toRet.FailedDetails = tmpToRet;
-                //            toRet.Success = false;
-                //        }
-                //        else
-                //        {
-                //            // Error, no information on connected users. Unexpeted error
-                //        }
-                //    }
-
-                //}
-                //else if (User.Identity.IsAuthenticated)
-                //{
-                //    return new ForbidResult();
-                //}
-                //else
-                //{
-                //    return new ChallengeResult();
-                //}
-                //#endregion
+               
             }
             catch (Exception ex)
             {
@@ -176,7 +94,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Put
-        //  [Authorize]
+        [Authorize]
         [HttpPut]
         [Route("Put/{id}")]
         //POST: /api/User/Put/{id}
@@ -197,63 +115,7 @@ namespace WindServiceWebAPI.Controllers.v1
 
                 toRet = _dtoDAL?.GetUserDAL()?.Update(value);
 
-                // #region AuthorizeAsync
-                // TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                //new TS_EntityResourseRequirement(EEntityType.User.ToString(), EEntityAction.UPDATE.ToString(), id, null, EEUserClaimConfigurationType.Advanced),
-                //new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.UPDATE.ToString(), id, null, EEUserClaimConfigurationType.Basic)
-                //);
-
-                // var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, value, allReq);
-
-                // if (authorizationResult.Succeeded)
-                // {
-                //     if (!string.IsNullOrEmpty(value.SystemString))
-                //     {
-                //         if (value.SystemString.Contains("{system-admin-User}"))
-                //         {
-                //             return new ForbidResult();
-                //         }
-                //     }
-
-                //     toRet = _dtoDAL?.GetUserDAL()?.Update(value);
-
-                //     #region Logout user after edit User
-                //     if (toRet.Success && toRet.Value != null)
-                //     {
-                //         DtoPaging dtoPaging = new DtoPaging();
-                //         dtoPaging.filters.Add("AssignUserId", $"{toRet.Value.Id}");
-                //         dtoPaging.filtersType.Add("AssignUserId", "eq");
-                //         var usersResponse = _dtoDAL.GetUserDAL().GetList(dtoPaging);
-
-                //         if (usersResponse.Value != null && usersResponse.Success)
-                //         {
-                //             foreach (var user in usersResponse.Value)
-                //             {
-                //                 // user.UserToken = null;
-                //                 var response = _dtoDAL.GetUserDAL()?.LogoutUser(user.Id);
-
-                //                 if (!response.Success || response.Value == null)
-                //                 {
-                //                     toRet.Success = false;
-                //                     toRet.Message = "Can not logout user.";
-                //                     return toRet;
-                //                 }
-                //             }
-                //         }
-
-                //     }
-                //     #endregion
-
-                // }
-                // else if (User.Identity.IsAuthenticated)
-                // {
-                //     return new ForbidResult();
-                // }
-                // else
-                // {
-                //     return new ChallengeResult();
-                // }
-                // #endregion
+               
             }
             catch (Exception ex)
             {
@@ -266,7 +128,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Get(string inPaggingJson)
-      //  [Authorize]
+        [Authorize]
         [HttpGet]
         [Route("Get")]
         //POST: /api/User/Get
@@ -289,29 +151,7 @@ namespace WindServiceWebAPI.Controllers.v1
                 }
                 toRet = _dtoDAL?.GetUserDAL()?.GetList(inpaging);
 
-                //  #region AuthorizeAsync
-                //  TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                //new TS_EntityResourseRequirement(EEntityType.User.ToString(), EEntityAction.READ.ToString(), 0, null, EEUserClaimConfigurationType.Advanced),
-                //new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.READ.ToString(), 0, null, EEUserClaimConfigurationType.Basic)
-                //);
-
-                //  var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, inpaging, allReq);
-
-                //  if (authorizationResult.Succeeded)
-                //  {
-                //      toRet = _dtoDAL?.GetUserDAL()?.GetList(inpaging);
-
-
-                //  }
-                //  else if (User.Identity.IsAuthenticated)
-                //  {
-                //      return new ForbidResult();
-                //  }
-                //  else
-                //  {
-                //      return new ChallengeResult();
-                //  }
-                //  #endregion
+                
             }
             catch (Exception ex)
             {
@@ -334,28 +174,7 @@ namespace WindServiceWebAPI.Controllers.v1
             try
             {
                 toRet = _dtoDAL?.GetUserDAL()?.Get(id);
-                // #region AuthorizeAsync
-                // TS_EntityResourseRequirementList allReq = new TS_EntityResourseRequirementList(
-                //new TS_EntityResourseRequirement(EEntityType.User.ToString(), EEntityAction.READ.ToString(), id, null, EEUserClaimConfigurationType.Advanced),
-                //new TS_EntityResourseRequirement(EEntityType.ConfigurationSettings.ToString(), EEntityAction.READ.ToString(), id, null, EEUserClaimConfigurationType.Basic)
-                //);
-
-                // var authorizationResult = await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User, id, allReq);
-
-                // if (authorizationResult.Succeeded)
-                // {
-                //     toRet = _dtoDAL?.GetUserDAL()?.Get(id);
-
-                // }
-                // else if (User.Identity.IsAuthenticated)
-                // {
-                //     return new ForbidResult();
-                // }
-                // else
-                // {
-                //     return new ChallengeResult();
-                // }
-                // #endregion
+               
             }
             catch (Exception ex)
             {

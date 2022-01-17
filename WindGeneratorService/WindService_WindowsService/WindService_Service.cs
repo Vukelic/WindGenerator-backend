@@ -3,6 +3,7 @@ using DtoModel.DtoModels.Implementations.WindGeneratorDevice;
 using DtoModel.DtoModels.Implementations.WindGeneratorDevice_History;
 using DtoServiceDAL.Abstractions;
 using DtoServiceDAL.GlobalInstanceSelector;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,8 +22,7 @@ namespace WindService_WindowsService
 {
     partial class WindService_Service : ServiceBase
     {
-        string path = "C:\\ProgramData\\windService\\debug.txt";
-        string connectionString = @"Server=DESKTOP-H4344E1\SQLEXPRESS;Database=wind-service-database;Trusted_Connection=True;MultipleActiveResultSets=true";
+       
 
         Thread checkForNewGenerators_Thread;
         TimeSpan checkForNewGenerators_Thread_SleepTime = new TimeSpan(0, 0, 5);
@@ -32,24 +32,29 @@ namespace WindService_WindowsService
 
 
         bool _stop = false;
-        bool _gettingGeneratorInfoProccessStarted = false;
 
         private List<DtoWindGeneratorDevice> WindGenerators = new List<DtoWindGeneratorDevice>();
+
+        IConfigurationRoot config;
+
+        string connectionString;
+        string api_key;
 
         public WindService_Service()
         {
             InitializeComponent();
 
-            ApiHelper.InitializeClient();
+            GetConfig();
+
+            ApiHelper.InitializeClient(api_key);
 
             //DTO dal implementation
             GlobalDtoDALInstanceSelector.GetDtoDALImplementation = () =>
             {
                 return new DtoLocalServiceDAL(connectionString);
             };
-            InitializeClass();
 
-           
+            InitializeClass();
 
         }
 
@@ -60,37 +65,54 @@ namespace WindService_WindowsService
 
         public void OnDebug()
         {
-            if (!Directory.Exists("C:\\ProgramData\\windService"))
-            {
-                Directory.CreateDirectory("C:\\ProgramData\\windService");
-            }
+            
             string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            File.AppendAllText(path, $"OnDebug service, {dateStr}.\n");
+
+            this.Debug_Test($"OnDebug service {dateStr}.\n ");
 
             OnStart(null);
             System.Threading.Thread.CurrentThread.Join();
         }
+        public void GetConfig()
+        {
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            config = builder.Build();
+            if (config != null)
+            {
+                try
+                {
+                    var _connectionString = config.GetConnectionString("DefaultConnection");
+                    if (!string.IsNullOrEmpty(_connectionString))
+                    {
+                        connectionString = _connectionString;
+                    }
+
+                    var web_api = config.GetSection("Api_id");
+                    if (!string.IsNullOrEmpty(web_api.Value))
+                    {
+                        api_key = web_api.Value;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
 
         protected override void OnStart(string[] args)
         {
-            if (!Directory.Exists("C:\\ProgramData\\windService"))
-            {
-                Directory.CreateDirectory("C:\\ProgramData\\windService");
-            }
-            string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            File.AppendAllText(path, $"\n\nOnStart service, {dateStr}.\n");
-            //using (StreamWriter sw = (File.Exists(path)) ? File.AppendText(path) : File.CreateText(path))
-            //{
-            //    sw.WriteLine("Successfully onStart!");
-            //}
+           
+            this.Debug_Test($"nOnStart service.\n ");
+
             StartProcesses();
-            
         }
 
         protected override void OnStop()
         {
             string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            File.AppendAllText(path, $"OnStop service, {dateStr}.\n");
+            this.Debug_Test($"OnStop service, {dateStr}.\n");
 
             StopProcesses();
         }
@@ -99,8 +121,7 @@ namespace WindService_WindowsService
         private void StopProcesses()
         {
             string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            File.AppendAllText(path, $"StopProcesses service, {dateStr}.\n");
-
+            this.Debug_Test($"StopProcesses service, {dateStr}.\n");
             _stop = true;
 
             // checkForNewGenerators_Thread = null;
@@ -127,7 +148,7 @@ namespace WindService_WindowsService
             {
 
                 string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                File.AppendAllText(path, $"GetGeneratorsInfo, {dateStr}.\n");
+                this.Debug_Test($"GetGeneratorsInfo, {dateStr}.\n");
 
                 try
                 {
@@ -138,7 +159,7 @@ namespace WindService_WindowsService
                         foreach (var windGenerator in tmpWindGenerators)
                         {
                             WeatherModel weatherModel = GetWeatherInformationForGenerator(windGenerator);
-                            
+
                             if (weatherModel != null)
                             {
                                 this.Debug_Test($"weatherModel not null GetGeneratorsInfo");
@@ -178,7 +199,7 @@ namespace WindService_WindowsService
             while (!_stop)
             {
                 string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                File.AppendAllText(path, $"CheckForNewGenerators, {dateStr}.\n");
+                this.Debug_Test($"CheckForNewGenerators, {dateStr}.\n");
 
                 try
                 {
@@ -221,8 +242,6 @@ namespace WindService_WindowsService
             }
         }
 
-
-
         //Work with Database functions
         private List<DtoWindGeneratorDevice> GetWindGenerators()
         {
@@ -237,8 +256,14 @@ namespace WindService_WindowsService
         }
         private void Debug_Test(string message)
         {
-            string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            File.AppendAllText(path, $"{message}, {dateStr}.\n");
+            // string path = "C:\\ProgramData\\windService\\debug.txt";  //for test only 
+            //if (!Directory.Exists(path))
+            //{
+            //    Directory.CreateDirectory(path);
+            //}
+
+            //string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            //File.AppendAllText(path, $"{message}, {dateStr}.\n");
         }
         //Work with WeatherApi functions
         private WeatherModel GetWeatherInformationForGenerator(DtoWindGeneratorDevice newGenerator)
@@ -265,10 +290,11 @@ namespace WindService_WindowsService
             const double ro = 1.293;
             const double A = 80;
 
-            if(Wind_Speed < 3)
+            if (Wind_Speed < 3)
             {
                 toRet = 0;
-            }else if (Wind_Speed >= 3 && Wind_Speed <= 10)
+            }
+            else if (Wind_Speed >= 3 && Wind_Speed <= 10)
             {
                 toRet = 0.5 * A * ro * Math.Pow(Wind_Speed, 3);
             }
@@ -288,7 +314,7 @@ namespace WindService_WindowsService
             Math.Round(toRet, 2);
             return toRet;
         }
-        
+
         //add wind power in database
         private bool Update_WindGenerator_CurrentPower(DtoWindGeneratorDevice windGenerator)
         {
@@ -298,14 +324,13 @@ namespace WindService_WindowsService
             {
                 var windGeneratorResponse = dtoDal?.GetWindGeneratorDeviceDAL()?.UpdatePowerOnGenerator(windGenerator);
 
-                if(windGeneratorResponse != null && windGeneratorResponse.Success)
+                if (windGeneratorResponse != null && windGeneratorResponse.Success)
                 {
                     return true;
                 }
             }
             return false;
         }
-
         private bool Add_HistoryWindGenerator(DtoWindGeneratorDevice windGenerator)
         {
             ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
