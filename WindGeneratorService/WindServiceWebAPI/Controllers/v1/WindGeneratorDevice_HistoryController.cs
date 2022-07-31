@@ -136,7 +136,10 @@ namespace WindServiceWebAPI.Controllers.v1
                     }
                 }
                 toRet = _dtoDAL?.GetWindGeneratorDevice_HistoryDAL()?.GetList(inpaging);
-             
+                if(toRet.Success && toRet.Value != null){
+                    toRet.Value= toRet.Value.OrderBy(x => x.TimeCreated).ToList();
+                }
+
             }
             catch (Exception ex)
             {
