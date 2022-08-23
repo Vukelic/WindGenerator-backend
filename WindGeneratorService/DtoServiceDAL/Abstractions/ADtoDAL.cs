@@ -2,6 +2,7 @@
 using DtoServiceDAL.Interfaces.User;
 using DtoServiceDAL.Interfaces.WindGeneratorDevice;
 using DtoServiceDAL.Interfaces.WindGeneratorDevice_History;
+using DtoServiceDAL.Interfaces.WindGeneratorType;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,6 +40,12 @@ namespace DtoServiceDAL.Abstractions
         public virtual IDtoWindGeneratorDevice_HistoryDAL GetWindGeneratorDevice_HistoryDAL()
         {
             return WindGeneratorDevice_HistoryDALService;
+        }
+
+        public IDtoWindGeneratorTypeDAL WindGeneratorTypeDALService { get; set; }
+        public virtual IDtoWindGeneratorTypeDAL GetWindGeneratorTypeDAL()
+        {
+            return WindGeneratorTypeDALService;
         }
 
         #region INotifyPropertyChange implementation

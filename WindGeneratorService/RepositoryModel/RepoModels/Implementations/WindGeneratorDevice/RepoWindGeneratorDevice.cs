@@ -1,5 +1,7 @@
 ﻿using RepositoryModel.RepoModels.Abstractions.Common;
+using RepositoryModel.RepoModels.Implementations.User;
 using RepositoryModel.RepoModels.Implementations.WindGeneratorDevice_History;
+using RepositoryModel.RepoModels.Implementations.WindGeneratorType;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -180,6 +182,70 @@ namespace RepositoryModel.RepoModels.Implementations.WindGeneratorDevice
                 if (_ListOfWindGeneratorDevice_History != value)
                 {
                     _ListOfWindGeneratorDevice_History = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ParentWindGeneratorType- property
+        private RepoWindGeneratorType _ParentWindGeneratorType;
+        public virtual RepoWindGeneratorType ParentWindGeneratorType
+        {
+            get { return _ParentWindGeneratorType; }
+            set
+            {
+                if (_ParentWindGeneratorType != value)
+                {
+                    _ParentWindGeneratorType = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ParentWindGeneratorTypeId- property
+        private long _ParentWindGeneratorTypeId;
+        public long ParentWindGeneratorTypeId
+        {
+            get { return _ParentWindGeneratorTypeId; }
+            set
+            {
+                if (_ParentWindGeneratorTypeId != value)
+                {
+                    _ParentWindGeneratorTypeId = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ParentUser- property
+        private RepoUser _ParentUser;
+        public virtual RepoUser ParentUser
+        {
+            get { return _ParentUser; }
+            set
+            {
+                if (_ParentUser != value)
+                {
+                    _ParentUser = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ParentUserId- property
+        private long _ParentUserId;
+        public long ParentUserId
+        {
+            get { return _ParentUserId; }
+            set
+            {
+                if (_ParentUserId != value)
+                {
+                    _ParentUserId = value;
                     NotifyPropertyChanged();
                 }
             }

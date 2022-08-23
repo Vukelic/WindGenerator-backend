@@ -1,5 +1,6 @@
 ﻿using DtoModel.DtoModels.Abstractions.Common;
 using DtoModel.DtoModels.Implementations.Role;
+using DtoModel.DtoModels.Implementations.WindGeneratorDevice;
 using DtoModel.DtoModels.Interfaces.User;
 using System;
 using System.Collections.Generic;
@@ -309,6 +310,22 @@ namespace DtoModel.DtoModels.Implementations.User
                 if (_AssignRoleId != value)
                 {
                     _AssignRoleId = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ListOfGenerators- property
+        private List<DtoWindGeneratorDevice> _ListOfGenerators;
+        public virtual List<DtoWindGeneratorDevice> ListOfGenerators
+        {
+            get { return _ListOfGenerators; }
+            set
+            {
+                if (_ListOfGenerators != value)
+                {
+                    _ListOfGenerators = value;
                     NotifyPropertyChanged();
                 }
             }

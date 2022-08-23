@@ -3,6 +3,7 @@ using RepoServiceDAL.Interfaces.Role;
 using RepoServiceDAL.Interfaces.User;
 using RepoServiceDAL.Interfaces.WindGeneratorDevice;
 using RepoServiceDAL.Interfaces.WindGeneratorDevice_History;
+using RepoServiceDAL.Interfaces.WindGeneratorType;
 using RepositoryModel.RepoModels.Abstractions.Common;
 using RepositoryModel.RepoResponseObjectModels.Common;
 using System;
@@ -43,6 +44,12 @@ namespace RepoServiceDAL.Abstractions
         public virtual IRepositoryWindGeneratorDevice_HistoryDAL GetWindGeneratorDevice_HistoryDAL()
         {
             return WindGeneratorDevice_HistoryDALService;
+        }
+
+        public IRepositoryWindGeneratorTypeDAL WindGeneratorTypeDALService { get; set; }
+        public virtual IRepositoryWindGeneratorTypeDAL GetWindGeneratorTypeDAL()
+        {
+            return WindGeneratorTypeDALService;
         }
     }
 }

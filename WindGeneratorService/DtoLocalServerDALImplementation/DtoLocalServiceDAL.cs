@@ -2,6 +2,7 @@
 using DtoLocalServerDALImplementation.DALImplementation.User;
 using DtoLocalServerDALImplementation.DALImplementation.WindGeneratorDevice;
 using DtoLocalServerDALImplementation.DALImplementation.WindGeneratorDevice_History_History;
+using DtoLocalServerDALImplementation.DALImplementation.WindGeneratorType;
 using DtoServiceDAL.Abstractions;
 using EntityFrameworkCoreContextRepository.DALImplementation;
 using RepoServiceDAL.Interfaces;
@@ -38,7 +39,7 @@ namespace DtoLocalServerDALImplementation
             UserDALService = new DtoUserDAL(dbService);
             WindGeneratorDeviceDALService = new DtoWindGeneratorDeviceDAL(dbService);
             WindGeneratorDevice_HistoryDALService = new DtoWindGeneratorDevice_HistoryDAL(dbService);
-         
+            WindGeneratorTypeDALService = new DtoWindGeneratorTypeDAL(dbService);
         }
     }
 }

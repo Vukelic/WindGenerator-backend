@@ -1,5 +1,6 @@
 ﻿using RepositoryModel.RepoModels.Abstractions.Common;
 using RepositoryModel.RepoModels.Implementations.Role;
+using RepositoryModel.RepoModels.Implementations.WindGeneratorDevice;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -292,6 +293,22 @@ namespace RepositoryModel.RepoModels.Implementations.User
                 if (_AssignRoleId != value)
                 {
                     _AssignRoleId = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ListOfWindGeneratorDevice- property
+        private List<RepoWindGeneratorDevice> _ListOfWindGeneratorDevice;
+        public virtual List<RepoWindGeneratorDevice> ListOfWindGeneratorDevice
+        {
+            get { return _ListOfWindGeneratorDevice; }
+            set
+            {
+                if (_ListOfWindGeneratorDevice != value)
+                {
+                    _ListOfWindGeneratorDevice = value;
                     NotifyPropertyChanged();
                 }
             }

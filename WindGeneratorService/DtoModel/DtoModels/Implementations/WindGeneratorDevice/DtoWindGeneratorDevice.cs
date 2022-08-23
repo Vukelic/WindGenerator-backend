@@ -1,5 +1,7 @@
 ﻿using DtoModel.DtoModels.Abstractions.Common;
+using DtoModel.DtoModels.Implementations.User;
 using DtoModel.DtoModels.Implementations.WindGeneratorDevice_History;
+using DtoModel.DtoModels.Implementations.WindGeneratorType;
 using DtoModel.DtoModels.Interfaces.WindGeneratorDevice;
 using System;
 using System.Collections.Generic;
@@ -182,6 +184,54 @@ namespace DtoModel.DtoModels.Implementations.WindGeneratorDevice
                 if (_ListOfWindGeneratorDevice_History != value)
                 {
                     _ListOfWindGeneratorDevice_History = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ParentWindGeneratorType- property
+        private DtoWindGeneratorType _ParentWindGeneratorType;
+        public virtual DtoWindGeneratorType ParentWindGeneratorType
+        {
+            get { return _ParentWindGeneratorType; }
+            set
+            {
+                if (_ParentWindGeneratorType != value)
+                {
+                    _ParentWindGeneratorType = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ParentUser- property
+        private DtoUser _ParentUser;
+        public virtual DtoUser ParentUser
+        {
+            get { return _ParentUser; }
+            set
+            {
+                if (_ParentUser != value)
+                {
+                    _ParentUser = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -ParentUserId- property
+        private long _ParentUserId;
+        public long ParentUserId
+        {
+            get { return _ParentUserId; }
+            set
+            {
+                if (_ParentUserId != value)
+                {
+                    _ParentUserId = value;
                     NotifyPropertyChanged();
                 }
             }

@@ -3,6 +3,7 @@ using EntityFrameworkCoreContextRepository.DALImplementation.Role;
 using EntityFrameworkCoreContextRepository.DALImplementation.User;
 using EntityFrameworkCoreContextRepository.DALImplementation.WindGeneratorDevice;
 using EntityFrameworkCoreContextRepository.DALImplementation.WindGeneratorDevice_History;
+using EntityFrameworkCoreContextRepository.DALImplementation.WindGeneratorType;
 using Microsoft.EntityFrameworkCore;
 using RepoServiceDAL.Abstractions;
 using RepositoryModel.RepoModels.Abstractions.Common;
@@ -26,7 +27,8 @@ namespace EntityFrameworkCoreContextRepository.DALImplementation
             UserDALService = new RepositoryUserDAL(db);
             WindGeneratorDeviceDALService = new RepositoryWindGeneratorDeviceDAL(db);
             RoleDALService = new RepositoryRoleDAL(db);
-            WindGeneratorDevice_HistoryDALService = new RepositoryWindGeneratorDevice_HistoryDAL(db);          
+            WindGeneratorDevice_HistoryDALService = new RepositoryWindGeneratorDevice_HistoryDAL(db);
+            WindGeneratorTypeDALService = new RepositoryWindGeneratorTypeDAL(db);
         }
 
         public EntityFrameworkCoreDAL(string inConnectionString) : base()
@@ -54,6 +56,7 @@ namespace EntityFrameworkCoreContextRepository.DALImplementation
             WindGeneratorDeviceDALService = new RepositoryWindGeneratorDeviceDAL(db);
             RoleDALService = new RepositoryRoleDAL(db);
             WindGeneratorDevice_HistoryDALService = new RepositoryWindGeneratorDevice_HistoryDAL(db);
+            WindGeneratorTypeDALService = new RepositoryWindGeneratorTypeDAL(db);
         }
         public override RepositoryResponseBase<long> SaveChanges()
         {
