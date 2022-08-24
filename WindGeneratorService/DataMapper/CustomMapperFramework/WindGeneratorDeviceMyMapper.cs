@@ -43,7 +43,9 @@ namespace DataMapper.CustomMapperFramework
                     GeographicalLongitude = inObj.GeographicalLongitude,
                     GeographicalLongitudeStr = inObj.GeographicalLongitudeStr,
                     City = inObj.City,
-                    Country = inObj.Country
+                    Country = inObj.Country,
+                    ParentUserId = inObj.ParentUserId,
+                    ParentWindGeneratorTypeId = inObj.ParentWindGeneratorTypeId,
                     // COMPLEX
                     //COMPLEX LIST
 
@@ -112,7 +114,9 @@ namespace DataMapper.CustomMapperFramework
                     GeographicalLongitude = inObj.GeographicalLongitude,
                     GeographicalLongitudeStr = inObj.GeographicalLongitudeStr,
                     City = inObj.City,
-                    Country = inObj.Country
+                    Country = inObj.Country,
+                    ParentUserId = inObj.ParentUserId,
+                    ParentWindGeneratorTypeId = inObj.ParentWindGeneratorTypeId,
 
 
                     //COMPLEX LIST

@@ -206,6 +206,22 @@ namespace DtoModel.DtoModels.Implementations.WindGeneratorDevice
         }
         #endregion
 
+        #region -ParentWindGeneratorTypeId- property
+        private long _ParentWindGeneratorTypeId;
+        public long ParentWindGeneratorTypeId
+        {
+            get { return _ParentWindGeneratorTypeId; }
+            set
+            {
+                if (_ParentWindGeneratorTypeId != value)
+                {
+                    _ParentWindGeneratorTypeId = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         #region -ParentUser- property
         private DtoUser _ParentUser;
         public virtual DtoUser ParentUser

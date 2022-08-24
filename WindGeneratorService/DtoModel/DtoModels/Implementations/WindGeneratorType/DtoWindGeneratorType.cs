@@ -205,7 +205,7 @@ namespace DtoModel.DtoModels.Implementations.WindGeneratorType
 
         #region -ListOfGenerators- property
         private List<DtoWindGeneratorDevice> _ListOfGenerators;
-        public virtual List<DtoWindGeneratorDevice> ListOfGenerators
+        public  List<DtoWindGeneratorDevice> ListOfGenerators
         {
             get { return _ListOfGenerators; }
             set
