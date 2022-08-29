@@ -235,8 +235,8 @@ namespace EntityFrameworkCoreContextRepository.DALImplementation.User
             if (password == null) return false;
           //  if (!VerifyPassword(password)) throw new ArgumentException("Value must have min 8 characters and max 30 it must contains 1 upper case and 1 number!", "password");
             if (string.IsNullOrWhiteSpace(password)) return false;
-            if (storedHash.Length != 64) return false;
-            if (storedSalt.Length != 128) return false;
+            //if (storedHash.Length != 64) return false;
+            //if (storedSalt.Length != 128) return false;
 
             using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {

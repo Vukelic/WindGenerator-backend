@@ -113,7 +113,7 @@ namespace WindServiceWebAPI.Controllers.v1
                 }
                 value.TimeModified = DateTime.UtcNow;
 
-                toRet = _dtoDAL?.GetUserDAL()?.Update(value);
+                toRet = _dtoDAL?.GetUserDAL()?.UpdateBasicInfoUser(value);
 
                
             }
@@ -270,7 +270,7 @@ namespace WindServiceWebAPI.Controllers.v1
                 {
                     toRet.Success = false;
                     toRet.Message = "User is null.";
-                    return BadRequest(toRet);
+                    return Ok(toRet);
                 }
 
                 var resp = _dtoDAL?.GetUserDAL()?.FindByUsername(userDto.UserName);
@@ -279,7 +279,7 @@ namespace WindServiceWebAPI.Controllers.v1
                 {
                     toRet.Success = false;
                     toRet.Message = "Username is existed in db.";
-                    return BadRequest(toRet);
+                    return Ok(toRet);
                 }
 
                 userDto.TimeCreated = DateTime.UtcNow;
@@ -311,7 +311,7 @@ namespace WindServiceWebAPI.Controllers.v1
                             toRet.Success = false;
                             toRet.Message = toRet.Message;
                             toRet.MessageDescription = toRet.MessageDescription;
-                            return BadRequest(toRet);
+                            return Ok(toRet);
                         }
                     }
                 }
@@ -330,6 +330,77 @@ namespace WindServiceWebAPI.Controllers.v1
         }
         #endregion
 
+        #region RegisterAdmin
+        [HttpPost]
+        [Route("RegisterAdmin")]
+        public ActionResult<DtoUserResponse> RegisterAdmin([FromBody] DtoUser userDto)
+        {
+            DtoUserResponse toRet = new DtoUserResponse();
+            try
+            {
+                if (userDto == null)
+                {
+                    toRet.Success = false;
+                    toRet.Message = "User is null.";
+                    return BadRequest(toRet);
+                }
+
+                var resp = _dtoDAL?.GetUserDAL()?.FindByUsername(userDto.UserName);
+
+                if (resp.Success || resp.Value != null)
+                {
+                    toRet.Success = false;
+                    toRet.Message = "Username is existed in db.";
+                    return BadRequest(toRet);
+                }
+
+                userDto.TimeCreated = DateTime.UtcNow;
+
+                byte[] passwordHash = null;
+                byte[] passwordSalt = null;
+
+                var response = _dtoDAL?.GetUserDAL()?.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
+
+                var responseRole = _dtoDAL?.GetRoleDAL()?.GetList();
+                if (responseRole != null && responseRole.Success && responseRole.Value != null)
+                {
+                    var userRole = responseRole.Value.FirstOrDefault(o => o.SystemString == "{system-admin-role}");
+
+                    if (userRole != null)
+                    {
+                        if (response.Success)
+                        {
+                            userDto.PasswordHash = passwordHash;
+                            userDto.PasswordSalt = passwordSalt;
+                            userDto.AssignRoleId = userRole.Id;
+                        }
+
+
+                        toRet = _dtoDAL?.GetUserDAL()?.Create(userDto);
+
+                        if (toRet.Success != true)
+                        {
+                            toRet.Success = false;
+                            toRet.Message = toRet.Message;
+                            toRet.MessageDescription = toRet.MessageDescription;
+                            return BadRequest(toRet);
+                        }
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                toRet.Success = false;
+                toRet.Message = "Failed executing web api service.";
+                toRet.MessageDescription = $"Error details: {ex}";
+            }
+            return Ok(toRet); ;
+
+        }
+        #endregion
 
         #region ChangePassword
         [HttpPost]
@@ -352,7 +423,7 @@ namespace WindServiceWebAPI.Controllers.v1
                 {
                     toRet.Success = false;
                     toRet.Message = "User is not matched.";
-                    return BadRequest(toRet);
+                    return Ok(toRet);
                 }
 
                 var userResonse = _dtoDAL?.GetUserDAL()?.Get(userDto.UserId);
@@ -361,7 +432,7 @@ namespace WindServiceWebAPI.Controllers.v1
                 {
                     toRet.Success = false;
                     toRet.Message = "User is not exists in db.";
-                    return BadRequest(toRet);
+                    return Ok(toRet);
                 }
 
                 var user = userResonse.Value;
@@ -370,16 +441,16 @@ namespace WindServiceWebAPI.Controllers.v1
                 if (respCheckIfOldPasswordCorrect.Success != true)
                 {
                     toRet.Success = false;
-                    toRet.Message = respCheckIfOldPasswordCorrect.Message;
-                    return BadRequest(toRet);
+                    toRet.Message = "Old password inccorect.";
+                    return Ok(toRet);
                 }
 
-                var responseUpdatePassword = _dtoDAL?.GetUserDAL()?.UpdatePassword(userDto.UserId, userDto.NewPassword);
-                if (responseUpdatePassword.Success != true)
+                toRet  = _dtoDAL?.GetUserDAL()?.UpdatePassword(userDto.UserId, userDto.NewPassword);
+                if (toRet.Success != true)
                 {
                     toRet.Success = false;
-                    toRet.Message = responseUpdatePassword.Message;
-                    return BadRequest(toRet);
+                    toRet.Message = toRet.Message;
+                    return Ok(toRet);
 
                 }
 
@@ -396,9 +467,9 @@ namespace WindServiceWebAPI.Controllers.v1
                 #region Update token
 
 
-                var tokenString = GenerateJWTToken.RequestToken(user, roleResp.Value, _tokenManagement.Secret, _tokenManagement.ExpiryTime);
+                //var tokenString = GenerateJWTToken.RequestToken(user, roleResp.Value, _tokenManagement.Secret, _tokenManagement.ExpiryTime);
 
-                toRet = _dtoDAL?.GetUserDAL()?.UpdateTokenAsync(user.Id, tokenString);
+                //toRet = _dtoDAL?.GetUserDAL()?.UpdateTokenAsync(user.Id, tokenString);
                 #endregion
 
             }
