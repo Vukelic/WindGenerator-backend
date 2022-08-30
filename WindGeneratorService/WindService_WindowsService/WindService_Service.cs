@@ -28,7 +28,7 @@ namespace WindService_WindowsService
         TimeSpan checkForNewGenerators_Thread_SleepTime = new TimeSpan(0, 0, 5);
 
         Thread getWindGeneratorsInfo_Thread;
-        TimeSpan getWindGeneratorsInfo_Thread_SleepTime = new TimeSpan(1, 0, 0);
+        TimeSpan getWindGeneratorsInfo_Thread_SleepTime = new TimeSpan(0, 1, 0);
 
 
         bool _stop = false;

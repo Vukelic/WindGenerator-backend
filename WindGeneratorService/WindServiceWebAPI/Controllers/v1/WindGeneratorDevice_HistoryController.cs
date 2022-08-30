@@ -130,6 +130,26 @@ namespace WindServiceWebAPI.Controllers.v1
                     try
                     {
                         inpaging = JsonConvert.DeserializeObject<DtoPaging>(inPaggingJson);
+
+                        var timeFrom = inpaging.filters.FirstOrDefault(t => t.Key == "TimeCreated::-->>1");
+
+                        var timeTo = inpaging.filters.FirstOrDefault(t => t.Key == "TimeCreated::-->>2");
+                        if (!string.IsNullOrWhiteSpace(timeFrom.Value))
+                        {
+                            inpaging.filters.Remove("TimeCreated::-->>1");
+                            inpaging.filtersType.Remove("TimeCreated::-->>1");
+                            inpaging.filters.Add("TimeCreated::-->>1", $"{timeFrom.Value.Replace('Z', ' ')}");
+                            inpaging.filtersType.Add("TimeCreated::-->>1", "gtoe");
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(timeTo.Value))
+                        {
+                            inpaging.filters.Remove("TimeCreated::-->>2");
+                            inpaging.filtersType.Remove("TimeCreated::-->>2");
+                            inpaging.filters.Add("TimeCreated::-->>2", $"{timeTo.Value.Replace('Z', ' ')}");
+                            inpaging.filtersType.Add("TimeCreated::-->>2", "ltoe");
+                        }
+                           
                     }
                     catch (Exception ex)
                     {
