@@ -1,0 +1,147 @@
+Sudan	: 0.002
+Libya	: 0.004
+Lebanon	: 0.005
+Iran	: 0.005
+Ethiopia	: 0.007
+Syria	: 0.01
+Kyrgyzstan	: 0.011
+Zimbabwe	: 0.013
+Iraq	: 0.013
+Suriname	: 0.014
+Bhutan	: 0.016
+Oman	: 0.026
+Uzbekistan	: 0.027
+Angola	: 0.028
+Burma	: 0.029
+Kuwait	: 0.029
+Cuba	: 0.03
+Qatar	: 0.032
+Zambia	: 0.035
+Ghana	: 0.037
+Algeria	: 0.038
+Laos	: 0.039
+Argentina	: 0.042
+Afghanistan	: 0.042
+Kazakhstan	: 0.042
+Pakistan	: 0.042
+Sri Lanka	: 0.043
+Egypt	: 0.043
+Ukraine	: 0.045
+Azerbaijan	: 0.047
+Bahrain	: 0.048
+Saudi Arabia	: 0.048
+Malaysia	: 0.049
+Turkey	: 0.051
+Trinidad & Tobago	: 0.052
+Nigeria	: 0.056
+Paraguay	: 0.058
+Bangladesh	: 0.059
+Nepal	: 0.065
+Tunisia	: 0.066
+Georgia	: 0.069
+India	: 0.075
+Cameroon	: 0.076
+Russia	: 0.078
+Moldova	: 0.078
+China	: 0.079
+Vietnam	: 0.08
+United Arab Emirates	: 0.081
+DR Congo	: 0.082
+Belarus	: 0.083
+Mexico	: 0.086
+Northern Macedonia	: 0.087
+Serbia	: 0.087
+Bosnia & Herz.	: 0.091
+Hungary	: 0.092
+Lesotho	: 0.092
+Taiwan	: 0.093
+Ecuador	: 0.096
+Albania	: 0.097
+Dominican Republic	: 0.097
+Indonesia	: 0.097
+Tanzania	: 0.098
+Botswana	: 0.099
+Armenia	: 0.099
+Jordan	: 0.1
+South Korea	: 0.1
+Thailand	: 0.104
+Swaziland	: 0.104
+Malawi	: 0.109
+Ivory Coast	: 0.11
+Morocco	: 0.111
+Canada	: 0.113
+Costa Rica	: 0.114
+Sierra Leone	: 0.114
+Namibia	: 0.119
+Bulgaria	: 0.123
+Mozambique	: 0.127
+Iceland	: 0.13
+Malta	: 0.134
+Colombia	: 0.135
+Mauritius	: 0.137
+Croatia	: 0.138
+Madagascar	: 0.14
+Norway	: 0.141
+Cambodia	: 0.148
+Macao	: 0.152
+South Africa	: 0.152
+Panama	: 0.156
+Hong Kong	: 0.157
+Senegal	: 0.157
+Poland	: 0.16
+Chile	: 0.161
+USA	: 0.162
+Philippines	: 0.163
+Israel	: 0.165
+Slovakia	: 0.169
+Nicaragua	: 0.174
+Uganda	: 0.175
+Togo	: 0.176
+Slovenia	: 0.179
+France	: 0.184
+Honduras	: 0.184
+Aruba	: 0.185
+Singapore	: 0.185
+Gabon	: 0.187
+Burkina Faso	: 0.187
+Greece	: 0.187
+New Zealand	: 0.187
+Romania	: 0.191
+Finland	: 0.197
+Brazil	: 0.198
+Mali	: 0.199
+Latvia	: 0.201
+Estonia	: 0.207
+Kenya	: 0.208
+Luxembourg	: 0.217
+Belize	: 0.217
+Sweden	: 0.218
+Peru	: 0.221
+Switzerland	: 0.222
+Australia	: 0.224
+Japan	: 0.224
+El Salvador	: 0.226
+Uruguay	: 0.227
+Portugal	: 0.23
+Lithuania	: 0.233
+Italy	: 0.239
+Austria	: 0.243
+Venezuela	: 0.243
+Czech Republic	: 0.244
+Rwanda	: 0.249
+Cyprus	: 0.257
+Guatemala	: 0.258
+Jamaica	: 0.261
+Bahamas	: 0.262
+Liechtenstein	: 0.265
+Cape Verde	: 0.287
+Ireland	: 0.287
+Barbados	: 0.306
+Belgium	: 0.315
+Spain	: 0.319
+United Kingdom	: 0.326
+Netherlands	: 0.331
+Germany	: 0.334
+Cayman Islands	: 0.348
+Denmark	: 0.385
+Bermuda	: 0.412
