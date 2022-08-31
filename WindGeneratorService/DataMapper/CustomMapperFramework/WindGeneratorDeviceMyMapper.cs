@@ -54,6 +54,11 @@ namespace DataMapper.CustomMapperFramework
 
 
                 };
+
+                if (inObj.ParentWindGeneratorType != null)
+                {
+                    toRet.ParentWindGeneratorType = Convert(inObj.ParentWindGeneratorType);
+                }
             }
             return toRet;
         }

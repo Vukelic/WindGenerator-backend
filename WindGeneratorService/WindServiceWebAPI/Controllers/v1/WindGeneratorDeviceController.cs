@@ -13,8 +13,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using WindService_WindowsService.Api;
-using WindService_WindowsService.Models;
 using WindServiceWebAPI.Models.CustomElectricity;
 
 namespace WindServiceWebAPI.Controllers.v1
@@ -194,7 +192,7 @@ namespace WindServiceWebAPI.Controllers.v1
                     {
                         if(item.Country == value.Country)
                         {
-                            priceElectricity = Convert.ToDouble(item.Price) * 1000;// + 0.5; //* 10;// / 100; //mWH
+                            priceElectricity = Convert.ToDouble(item.Price);// * 1000;// + 0.5; //* 10;// / 100; //mWH
                             break;
                         }
                         else
@@ -226,12 +224,13 @@ namespace WindServiceWebAPI.Controllers.v1
                     windHoursPerWay = Convert.ToDouble(type.GeneratorPower); //per day
                 }
 
-                var dailyConsumptionOfTurbines = powerOfTurbine * windHoursPerWay; //potrosnja turbine po danu
-               
-                var epsConsumtionFor10Years = priceElectricity * dailyConsumptionOfTurbines * 365 * 20; // last ten years eps
+                var dailyConsumptionOfTurbines = (powerOfTurbine * windHoursPerWay); //potrosnja turbine po danu
 
+                var epsConsumtionDaily = priceElectricity * dailyConsumptionOfTurbines; // last ten years eps
+
+                var epsConsumtion20Years = epsConsumtionDaily * 200 * 20;
                  //globalna cena turbine globalPriceOfTurbine
-                var profit = epsConsumtionFor10Years - globalPriceOfTurbine;
+                var profit = epsConsumtion20Years - globalPriceOfTurbine;
 
                 toRet.Success = true;
                 toRet.Profit = profit;
