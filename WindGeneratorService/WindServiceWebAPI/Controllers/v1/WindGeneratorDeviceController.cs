@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using DtoModel.DtoModels.Implementations.WindGeneratorDevice;
 using DtoModel.DtoRequestObjectModels.Paging;
+using DtoModel.DtoResponseObjectModels.Profit;
 using DtoModel.DtoResponseObjectModels.WindGeneratorDevice;
 using DtoServiceDAL.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using WindService_WindowsService.Api;
+using WindService_WindowsService.Models;
+using WindServiceWebAPI.Models.CustomElectricity;
 
 namespace WindServiceWebAPI.Controllers.v1
 {
@@ -170,5 +176,97 @@ namespace WindServiceWebAPI.Controllers.v1
         }
         #endregion
 
+        #region CalculateProfit
+        [Authorize]
+        [HttpPost]
+        [Route("CalculateProfit")]
+        //POST: /api/WindGeneratorDevice/CalculateProfit
+        public async Task<ActionResult<DtoProfitResponse>> CalculateProfit([FromBody] DtoWindGeneratorDevice value)
+        {
+            DtoProfitResponse toRet = new DtoProfitResponse();
+            try
+            {
+                var allData = readFromXmlFile();
+                var priceElectricity = 0.0;
+                if(allData != null && allData.Count > 0)
+                {
+                    foreach (var item in allData)
+                    {
+                        if(item.Country == value.Country)
+                        {
+                            priceElectricity = Convert.ToDouble(item.Price) * 1000;// + 0.5; //* 10;// / 100; //mWH
+                            break;
+                        }
+                        else
+                        {
+                            priceElectricity = 0.5;// / 100; //mWH
+                        
+                        }
+                    }
+                }
+               
+                //koliko vetro dana ima vetrnjaca
+                //kolika je snaga vetrenjace u 2000 mega vata
+                //i onda mnozivim snagu * sate *mesec * 10godina = dobijem koliko bi potrosio unazad 10 godiina
+                //koliko vetrog proizvede i koliko bi bilo kad bi kupila
+                // snagu * sate* 30 za mesec dana
+                //proveri koliko kosta 
+                //*1000 u mega kilowatima
+
+                var typeResponse = _dtoDAL?.GetWindGeneratorTypeDAL()?.Get(value.ParentWindGeneratorTypeId);
+                var globalPriceOfTurbine = 0;
+                var powerOfTurbine = 0.0;
+                var windHoursPerWay = 0.0;
+                if (typeResponse != null && typeResponse.Success)
+                {
+                    var type = typeResponse.Value;
+
+                    globalPriceOfTurbine = type.BasePrice + type.InstallationCosts;
+                    powerOfTurbine = Convert.ToDouble(type.PowerOfTurbines); //power of turbines in MW
+                    windHoursPerWay = Convert.ToDouble(type.GeneratorPower); //per day
+                }
+
+                var dailyConsumptionOfTurbines = powerOfTurbine * windHoursPerWay; //potrosnja turbine po danu
+               
+                var epsConsumtionFor10Years = priceElectricity * dailyConsumptionOfTurbines * 365 * 20; // last ten years eps
+
+                 //globalna cena turbine globalPriceOfTurbine
+                var profit = epsConsumtionFor10Years - globalPriceOfTurbine;
+
+                toRet.Success = true;
+                toRet.Profit = profit;
+                toRet.ProfitabillityIndex = (profit / (20*12));
+
+            }
+            catch (Exception ex)
+            {
+                toRet.Success = false;
+            }
+            return toRet;
+        }
+        #endregion
+
+
+        public List<CustomElectricity> readFromXmlFile()
+        {
+            List<CustomElectricity> toRet = new List<CustomElectricity>();
+
+            XmlDocument doc = new XmlDocument();
+
+            var currentDirectory = Directory.GetCurrentDirectory();
+            doc.Load($"{currentDirectory}\\allData.xml");
+
+
+            foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+            {
+                var country = String.Concat(node.FirstChild.InnerText.Where(c => !Char.IsWhiteSpace(c)));
+                var price = String.Concat(node.LastChild.InnerText.Where(c => !Char.IsWhiteSpace(c)));
+                toRet.Add(new CustomElectricity() { Country = country, Price = price });
+            }
+
+            return toRet;
+        }
+
+      
     }
 }

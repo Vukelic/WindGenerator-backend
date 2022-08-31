@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article lang="">
+   <electricity>
+      <country>Libya       </country>
+      <price>0.006</price>
+   </electricity>
+   <electricity>
+      <country>Lebanon       </country>
+      <price>0.006</price>
+   </electricity>
+   <electricity>
+      <country>Lesotho       </country>
+      <price>0.019</price>
+   </electricity>
+   <electricity>
+      <country>Ethiopia       </country>
+      <price>0.019</price>
+   </electricity>
+   <electricity>
+      <country>Sudan       </country>
+      <price>0.019</price>
+   </electricity>
+   <electricity>
+      <country>Angola       </country>
+      <price>0.022</price>
+   </electricity>
+   <electricity>
+      <country>Syria       </country>
+      <price>0.029</price>
+   </electricity>
+   <electricity>
+      <country>Argentina       </country>
+      <price>0.032</price>
+   </electricity>
+   <electricity>
+      <country>Algeria       </country>
+      <price>0.033</price>
+   </electricity>
+   <electricity>
+      <country>Bhutan       </country>
+      <price>0.034</price>
+   </electricity>
+   <electricity>
+      <country>Kyrgyzstan       </country>
+      <price>0.035</price>
+   </electricity>
+   <electricity>
+      <country>Qatar       </country>
+      <price>0.036</price>
+   </electricity>
+   <electricity>
+      <country>Sri Lanka       </country>
+      <price>0.036</price>
+   </electricity>
+   <electricity>
+      <country>Uzbekistan       </country>
+      <price>0.041</price>
+   </electricity>
+   <electricity>
+      <country>Iraq       </country>
+      <price>0.041</price>
+   </electricity>
+   <electricity>
+      <country>Kuwait       </country>
+      <price>0.049</price>
+   </electricity>
+   <electricity>
+      <country>electricityguay       </country>
+      <price>0.049</price>
+   </electricity>
+   <electricity>
+      <country>Turkey       </country>
+      <price>0.052</price>
+   </electricity>
+   <electricity>
+      <country>Kazakhstan       </country>
+      <price>0.053</price>
+   </electricity>
+   <electricity>
+      <country>Zambia       </country>
+      <price>0.053</price>
+   </electricity>
+   <electricity>
+      <country>Trinidad &amp; Tobago       </country>
+      <price>0.053</price>
+   </electricity>
+   <electricity>
+      <country>Egypt       </country>
+      <price>0.06</price>
+   </electricity>
+   <electricity>
+      <country>Iceland       </country>
+      <price>0.063</price>
+   </electricity>
+   <electricity>
+      <country>Moldova       </country>
+      <price>0.065</price>
+   </electricity>
+   <electricity>
+      <country>Azerbaijan       </country>
+      <price>0.065</price>
+   </electricity>
+   <electricity>
+      <country>Saudi Arabia       </country>
+      <price>0.068</price>
+   </electricity>
+   <electricity>
+      <country>Swaziland       </country>
+      <price>0.068</price>
+   </electricity>
+   <electricity>
+      <country>Nepal       </country>
+      <price>0.07</price>
+   </electricity>
+   <electricity>
+      <country>South Africa       </country>
+      <price>0.072</price>
+   </electricity>
+   <electricity>
+      <country>Indonesia       </country>
+      <price>0.075</price>
+   </electricity>
+   <electricity>
+      <country>Vietnam       </country>
+      <price>0.076</price>
+   </electricity>
+   <electricity>
+      <country>Bahrain       </country>
+      <price>0.077</price>
+   </electricity>
+   <electricity>
+      <country>Burma       </country>
+      <price>0.078</price>
+   </electricity>
+   <electricity>
+      <country>Armenia       </country>
+      <price>0.08</price>
+   </electricity>
+   <electricity>
+      <country>Mozambique       </country>
+      <price>0.08</price>
+   </electricity>
+   <electricity>
+      <country>Ghana       </country>
+      <price>0.08</price>
+   </electricity>
+   <electricity>
+      <country>Ecuador       </country>
+      <price>0.085</price>
+   </electricity>
+   <electricity>
+      <country>Malaysia       </country>
+      <price>0.086</price>
+   </electricity>
+   <electricity>
+      <country>Ukraine       </country>
+      <price>0.09</price>
+   </electricity>
+   <electricity>
+      <country>Nigeria       </country>
+      <price>0.091</price>
+   </electricity>
+   <electricity>
+      <country>China       </country>
+      <price>0.092</price>
+   </electricity>
+   <electricity>
+      <country>Rwanda       </country>
+      <price>0.093</price>
+   </electricity>
+   <electricity>
+      <country>Serbia       </country>
+      <price>0.094</price>
+   </electricity>
+   <electricity>
+      <country>South Korea       </country>
+      <price>0.095</price>
+   </electricity>
+   <electricity>
+      <country>Bangladesh       </country>
+      <price>0.095</price>
+   </electricity>
+   <electricity>
+      <country>Tunisia       </country>
+      <price>0.095</price>
+   </electricity>
+   <electricity>
+      <country>DR Congo       </country>
+      <price>0.096</price>
+   </electricity>
+   <electricity>
+      <country>Canada       </country>
+      <price>0.097</price>
+   </electricity>
+   <electricity>
+      <country>United Arab Emirates       </country>
+      <price>0.1</price>
+   </electricity>
+   <electricity>
+      <country>Morocco       </country>
+      <price>0.101</price>
+   </electricity>
+   <electricity>
+      <country>Tanzania       </country>
+      <price>0.101</price>
+   </electricity>
+   <electricity>
+      <country>Thailand       </country>
+      <price>0.102</price>
+   </electricity>
+   <electricity>
+      <country>Bosnia &amp; Herz.       </country>
+      <price>0.103</price>
+   </electricity>
+   <electricity>
+      <country>India       </country>
+      <price>0.103</price>
+   </electricity>
+   <electricity>
+      <country>Georgia       </country>
+      <price>0.105</price>
+   </electricity>
+   <electricity>
+      <country>Uruguay       </country>
+      <price>0.106</price>
+   </electricity>
+   <electricity>
+      <country>Madagascar       </country>
+      <price>0.107</price>
+   </electricity>
+   <electricity>
+      <country>Northern Macedonia       </country>
+      <price>0.108</price>
+   </electricity>
+   <electricity>
+      <country>Albania       </country>
+      <price>0.108</price>
+   </electricity>
+   <electricity>
+      <country>Slovenia       </country>
+      <price>0.11</price>
+   </electricity>
+   <electricity>
+      <country>Hungary       </country>
+      <price>0.113</price>
+   </electricity>
+   <electricity>
+      <country>Belarus       </country>
+      <price>0.114</price>
+   </electricity>
+   <electricity>
+      <country>Russia       </country>
+      <price>0.115</price>
+   </electricity>
+   <electricity>
+      <country>USA       </country>
+      <price>0.115</price>
+   </electricity>
+   <electricity>
+      <country>Botswana       </country>
+      <price>0.116</price>
+   </electricity>
+   <electricity>
+      <country>Greece       </country>
+      <price>0.117</price>
+   </electricity>
+   <electricity>
+      <country>Taiwan       </country>
+      <price>0.117</price>
+   </electricity>
+   <electricity>
+      <country>Chile       </country>
+      <price>0.118</price>
+   </electricity>
+   <electricity>
+      <country>Estonia       </country>
+      <price>0.119</price>
+   </electricity>
+   <electricity>
+      <country>Philippines       </country>
+      <price>0.12</price>
+   </electricity>
+   <electricity>
+      <country>Luxembourg       </country>
+      <price>0.12</price>
+   </electricity>
+   <electricity>
+      <country>Mauritius       </country>
+      <price>0.122</price>
+   </electricity>
+   <electricity>
+      <country>Jordan       </country>
+      <price>0.123</price>
+   </electricity>
+   <electricity>
+      <country>France       </country>
+      <price>0.125</price>
+   </electricity>
+   <electricity>
+      <country>Norway       </country>
+      <price>0.126</price>
+   </electricity>
+   <electricity>
+      <country>Finland       </country>
+      <price>0.129</price>
+   </electricity>
+   <electricity>
+      <country>Uganda       </country>
+      <price>0.13</price>
+   </electricity>
+   <electricity>
+      <country>Colombia       </country>
+      <price>0.131</price>
+   </electricity>
+   <electricity>
+      <country>Spain       </country>
+      <price>0.14</price>
+   </electricity>
+   <electricity>
+      <country>Pakistan       </country>
+      <price>0.14</price>
+   </electricity>
+   <electricity>
+      <country>Cameroon       </country>
+      <price>0.14</price>
+   </electricity>
+   <electricity>
+      <country>Mali       </country>
+      <price>0.144</price>
+   </electricity>
+   <electricity>
+      <country>Australia       </country>
+      <price>0.144</price>
+   </electricity>
+   <electricity>
+      <country>Poland       </country>
+      <price>0.148</price>
+   </electricity>
+   <electricity>
+      <country>Oman       </country>
+      <price>0.148</price>
+   </electricity>
+   <electricity>
+      <country>Malta       </country>
+      <price>0.149</price>
+   </electricity>
+   <electricity>
+      <country>Portugal       </country>
+      <price>0.15</price>
+   </electricity>
+   <electricity>
+      <country>Belgium       </country>
+      <price>0.15</price>
+   </electricity>
+   <electricity>
+      <country>Peru       </country>
+      <price>0.151</price>
+   </electricity>
+   <electricity>
+      <country>Sierra Leone       </country>
+      <price>0.152</price>
+   </electricity>
+   <electricity>
+      <country>Malawi       </country>
+      <price>0.152</price>
+   </electricity>
+   <electricity>
+      <country>Slovakia       </country>
+      <price>0.153</price>
+   </electricity>
+   <electricity>
+      <country>Hong Kong       </country>
+      <price>0.155</price>
+   </electricity>
+   <electricity>
+      <country>Dominican Republic       </country>
+      <price>0.155</price>
+   </electricity>
+   <electricity>
+      <country>Croatia       </country>
+      <price>0.157</price>
+   </electricity>
+   <electricity>
+      <country>Macao       </country>
+      <price>0.157</price>
+   </electricity>
+   <electricity>
+      <country>Costa Rica       </country>
+      <price>0.157</price>
+   </electricity>
+   <electricity>
+      <country>Singapore       </country>
+      <price>0.157</price>
+   </electricity>
+   <electricity>
+      <country>Guatemala       </country>
+      <price>0.16</price>
+   </electricity>
+   <electricity>
+      <country>Israel       </country>
+      <price>0.161</price>
+   </electricity>
+   <electricity>
+      <country>Togo       </country>
+      <price>0.162</price>
+   </electricity>
+   <electricity>
+      <country>Switzerland       </country>
+      <price>0.162</price>
+   </electricity>
+   <electricity>
+      <country>Brazil       </country>
+      <price>0.162</price>
+   </electricity>
+   <electricity>
+      <country>Mexico       </country>
+      <price>0.164</price>
+   </electricity>
+   <electricity>
+      <country>Japan       </country>
+      <price>0.166</price>
+   </electricity>
+   <electricity>
+      <country>Panama       </country>
+      <price>0.169</price>
+   </electricity>
+   <electricity>
+      <country>Belize       </country>
+      <price>0.173</price>
+   </electricity>
+   <electricity>
+      <country>Kenya       </country>
+      <price>0.174</price>
+   </electricity>
+   <electricity>
+      <country>Liechtenstein       </country>
+      <price>0.175</price>
+   </electricity>
+   <electricity>
+      <country>Cape Verde       </country>
+      <price>0.183</price>
+   </electricity>
+   <electricity>
+      <country>Honduras       </country>
+      <price>0.185</price>
+   </electricity>
+   <electricity>
+      <country>Ivory Coast       </country>
+      <price>0.187</price>
+   </electricity>
+   <electricity>
+      <country>Austria       </country>
+      <price>0.188</price>
+   </electricity>
+   <electricity>
+      <country>El Salvador       </country>
+      <price>0.197</price>
+   </electricity>
+   <electricity>
+      <country>Lithuania       </country>
+      <price>0.207</price>
+   </electricity>
+   <electricity>
+      <country>Latvia       </country>
+      <price>0.21</price>
+   </electricity>
+   <electricity>
+      <country>Nicaragua       </country>
+      <price>0.211</price>
+   </electricity>
+   <electricity>
+      <country>Bulgaria       </country>
+      <price>0.215</price>
+   </electricity>
+   <electricity>
+      <country>Romania       </country>
+      <price>0.216</price>
+   </electricity>
+   <electricity>
+      <country>Italy       </country>
+      <price>0.22</price>
+   </electricity>
+   <electricity>
+      <country>Jamaica       </country>
+      <price>0.22</price>
+   </electricity>
+   <electricity>
+      <country>Bermuda       </country>
+      <price>0.247</price>
+   </electricity>
+   <electricity>
+      <country>Netherlands       </country>
+      <price>0.247</price>
+   </electricity>
+   <electricity>
+      <country>United Kingdom       </country>
+      <price>0.253</price>
+   </electricity>
+   <electricity>
+      <country>Bahamas       </country>
+      <price>0.253</price>
+   </electricity>
+   <electricity>
+      <country>Czech Republic       </country>
+      <price>0.255</price>
+   </electricity>
+   <electricity>
+      <country>Denmark       </country>
+      <price>0.256</price>
+   </electricity>
+   <electricity>
+      <country>Aruba       </country>
+      <price>0.274</price>
+   </electricity>
+   <electricity>
+      <country>Venezuela       </country>
+      <price>0.285</price>
+   </electricity>
+   <electricity>
+      <country>Barbados       </country>
+      <price>0.292</price>
+   </electricity>
+   <electricity>
+      <country>Cyprus       </country>
+      <price>0.305</price>
+   </electricity>
+   <electricity>
+      <country>Germany       </country>
+      <price>0.317</price>
+   </electricity>
+   <electricity>
+      <country>Cayman Islands       </country>
+      <price>0.327</price>
+   </electricity>
+   <electricity>
+      <country>Burkina Faso       </country>
+      <price>0.413</price>
+   </electricity>
+</article>

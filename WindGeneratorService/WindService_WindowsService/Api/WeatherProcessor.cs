@@ -28,5 +28,24 @@ namespace WindService_WindowsService.Api
                 }
             }
         }
+
+        public static async Task<WeatherModel> LoadHistoryWeather(string Lat, string Lon, long start, long end)
+        {
+            //TODO:
+            string url = $"https://api.openweathermap.org/data/2.5/onecall?lat={ Lat }&lon={ Lon }&type=hour&start={ start }&end={ end }&APPID={ApiHelper.Api_key}";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    WeatherModel weather = await response.Content.ReadAsAsync<WeatherModel>();
+                    return weather;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }

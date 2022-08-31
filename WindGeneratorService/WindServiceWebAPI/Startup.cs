@@ -133,16 +133,6 @@ namespace WindServiceWebAPI
             app.UseCors(CorsPolicy);
 
             app.UseStaticFiles();
-            //app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
-
-            //  app.UseHttpsRedirection();
-
-
-
-
-
-
-
 
             app.UseAuthentication();
 
@@ -160,9 +150,7 @@ namespace WindServiceWebAPI
                 var dbContext = new WindServiceMainDbContext(builder.Options);
                 dbContext.Database.Migrate();
                 SuperAdminInitialization(dbContext);
-                //  MonitoringSuiteInitialization(dbContext);
-                //     VirtualObjectSetInitialization(dbContext);
-                //  GlobalSettingsInitialization(dbContext);
+
             }
             catch (Exception ex)
             {

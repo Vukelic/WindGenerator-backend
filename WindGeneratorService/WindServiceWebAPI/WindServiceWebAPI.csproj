@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DtoLocalServerDALImplementation\DtoLocalServerDALImplementation.csproj" />
     <ProjectReference Include="..\EntityFrameworkCoreContextRepository\EntityFrameworkCoreContextRepository.csproj" />
+    <ProjectReference Include="..\WindService_WindowsService\WindService_WindowsService.csproj" />
   </ItemGroup>
 
 

@@ -45,7 +45,9 @@ namespace DataMapper.CustomMapperFramework
                     PowerOfTurbines = inObj.PowerOfTurbines,
                     Turbines = inObj.Turbines,
                     Weight = inObj.Weight,
-                    WidthOfWing = inObj.WidthOfWing
+                    WidthOfWing = inObj.WidthOfWing,
+                    BasePrice = inObj.BasePrice,
+                    InstallationCosts = inObj.InstallationCosts,
                     // COMPLEX
                     //COMPLEX LIST
 
@@ -116,7 +118,9 @@ namespace DataMapper.CustomMapperFramework
                     PowerOfTurbines = inObj.PowerOfTurbines,
                     Turbines = inObj.Turbines,
                     Weight = inObj.Weight,
-                    WidthOfWing = inObj.WidthOfWing
+                    WidthOfWing = inObj.WidthOfWing,
+                    BasePrice = inObj.BasePrice,
+                    InstallationCosts = inObj.InstallationCosts,
                     //COMPLEX LIST
                     //TODO
                     //System - specific

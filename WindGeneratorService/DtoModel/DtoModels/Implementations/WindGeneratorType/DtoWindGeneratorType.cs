@@ -201,6 +201,38 @@ namespace DtoModel.DtoModels.Implementations.WindGeneratorType
         }
         #endregion
 
+        #region -BasePrice- property
+        private int _BasePrice;
+        public int BasePrice
+        {
+            get { return _BasePrice; }
+            set
+            {
+                if (_BasePrice != value)
+                {
+                    _BasePrice = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region -InstallationCosts- property
+        private int _InstallationCosts;
+        public int InstallationCosts
+        {
+            get { return _InstallationCosts; }
+            set
+            {
+                if (_InstallationCosts != value)
+                {
+                    _InstallationCosts = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         //COMPLEX PROPERTIES
 
         #region -ListOfGenerators- property
