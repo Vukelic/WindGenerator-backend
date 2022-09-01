@@ -28,7 +28,7 @@ namespace WindService_WindowsService
         TimeSpan checkForNewGenerators_Thread_SleepTime = new TimeSpan(0, 0, 5);
 
         Thread getWindGeneratorsInfo_Thread;
-        TimeSpan getWindGeneratorsInfo_Thread_SleepTime = new TimeSpan(0, 5, 0);
+        TimeSpan getWindGeneratorsInfo_Thread_SleepTime = new TimeSpan(0, 30, 0);
 
 
         bool _stop = false;
@@ -144,6 +144,7 @@ namespace WindService_WindowsService
         //add new and add history
         private void GetGeneratorsInfo()
         {
+            ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
             while (!_stop)
             {
 
@@ -158,12 +159,13 @@ namespace WindService_WindowsService
                     {
                         foreach (var windGenerator in tmpWindGenerators)
                         {
+                            var type = dtoDal?.GetWindGeneratorTypeDAL()?.Get(windGenerator.ParentWindGeneratorTypeId);
                             WeatherModel weatherModel = GetWeatherInformationForGenerator(windGenerator);
 
                             if (weatherModel != null)
                             {
                                 this.Debug_Test($"weatherModel not null GetGeneratorsInfo");
-                                var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed);
+                                var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed, type.Value.PowerOfTurbines);
                                 windGenerator.ValueDec = (decimal)wind_power;
                                 windGenerator.ValueStr = wind_power.ToString();
                                 windGenerator.TimeCreated = DateTime.UtcNow;
@@ -196,6 +198,7 @@ namespace WindService_WindowsService
         //add new generators
         private void CheckForNewGenerators()
         {
+            ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
             while (!_stop)
             {
                 string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -213,11 +216,11 @@ namespace WindService_WindowsService
                             foreach (var newGenerator in newGeneratorsList)
                             {
                                 WeatherModel weatherModel = GetWeatherInformationForGenerator(newGenerator);
-
+                                var type = dtoDal?.GetWindGeneratorTypeDAL()?.Get(newGenerator.ParentWindGeneratorTypeId);
                                 if (weatherModel != null)
                                 {
                                     this.Debug_Test($"weather model CheckForNewGenerators not null");
-                                    var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed);
+                                    var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed, type.Value.PowerOfTurbines);
                                     newGenerator.ValueDec = (decimal)wind_power;
                                     newGenerator.ValueStr = wind_power.ToString();
                                     newGenerator.TimeCreated = DateTime.UtcNow;
@@ -283,12 +286,12 @@ namespace WindService_WindowsService
         }
 
         //Calculate wind power
-        private double Calculate_WindPower(double Wind_Speed)
+        private double Calculate_WindPower(double Wind_Speed, string power = null)
         {
             double toRet = 0;
-            const double p_normal = 103.44;
+            double p_normal = Convert.ToDouble(power);
             const double ro = 1.293;
-            const double A = 80;
+            const double A = 1;
 
             if (Wind_Speed < 3)
             {
