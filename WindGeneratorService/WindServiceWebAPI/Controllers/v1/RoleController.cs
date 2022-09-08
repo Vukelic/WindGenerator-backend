@@ -114,7 +114,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Get(string inPaggingJson)
-        [Authorize]
+       //[Authorize]
         [HttpGet]
         [Route("Get")]
         //POST: /api/Role/Get
@@ -150,7 +150,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region Get(long id)
-        [Authorize]
+     //   [Authorize]
         [HttpGet]
         [Route("Get/{id}")]
         //POST: /api/Role/Get/{id}

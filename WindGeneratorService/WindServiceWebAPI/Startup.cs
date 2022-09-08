@@ -149,7 +149,7 @@ namespace WindServiceWebAPI
                 builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 var dbContext = new WindServiceMainDbContext(builder.Options);
                 dbContext.Database.Migrate();
-                SuperAdminInitialization(dbContext);
+             
 
             }
             catch (Exception ex)
@@ -158,74 +158,6 @@ namespace WindServiceWebAPI
             }
         }
 
-        #region SuperAdminInitialization
-
-        public void SuperAdminInitialization(WindServiceMainDbContext dbContext)
-        {
-            if (dbContext != null)
-            {
-                #region added super-admin-role in database
-
-                var role = dbContext.Roles.FirstOrDefault(r => r.SystemString.Contains("{system-admin-role}"));
-                if (role == null)
-                {
-                    var repoRole = new RepoRole
-                    {
-                        SystemString = "{system-admin-role}",
-                        Name = "SuperAdmin",
-                        Description = "Top level administrator. {read only}",
-                        Active = true,
-                    };
-
-                    dbContext.Roles.Add(repoRole);
-                    dbContext.SaveChanges();
-
-                    var toRetRole = dbContext.Roles.FirstOrDefault(r => r.Name.Contains("SuperAdmin"));
-                    #endregion
-
-                    #region added super-admin-user in database
-                    byte[] passwordHash;
-                    byte[] passwordSalt;
-
-                    RepositoryUserDAL.CreatePasswordHashStatic("WindServiceAdmin!1", out passwordHash, out passwordSalt);
-
-                    var repoUser = new RepoUser
-                    {
-                        UserName = "super-admin@windservice.com",
-                        PasswordHash = passwordHash,
-                        PasswordSalt = passwordSalt,
-                        AssignRoleId = toRetRole.Id,
-                        EmailConfirmed = true,
-                    };
-
-                    dbContext.Users.Add(repoUser);
-                    dbContext.SaveChanges();
-                    #endregion
-
-                    #region added regular-user-role in database
-
-                    var user_role = dbContext.Roles.FirstOrDefault(r => r.SystemString.Contains("{system-user-role}"));
-                    if (user_role == null)
-                    {
-                        var repoUserRole = new RepoRole
-                        {
-                            SystemString = "{system-user-role}",
-                            Name = "User",
-                            Description = "Top level user. {read only}",
-                            Active = true,
-                        };
-
-                        dbContext.Roles.Add(repoUserRole);
-                        dbContext.SaveChanges();
-
-                    }
-
-                    var toRetUserRole = dbContext.Roles.FirstOrDefault(r => r.Name.Contains("User"));
-
-                    #endregion
-                }
-            }
-        }
-        #endregion
+       
     }
 }

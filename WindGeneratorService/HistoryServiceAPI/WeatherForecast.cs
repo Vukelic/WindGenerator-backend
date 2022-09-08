@@ -1,6 +1,6 @@
 using System;
 
-namespace WindServiceAuthWebAPI
+namespace HistoryServiceAPI
 {
     public class WeatherForecast
     {
