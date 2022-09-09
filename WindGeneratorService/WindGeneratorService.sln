@@ -47,11 +47,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindServiceAuthWebAPI", "Wi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindServices", "WindServices", "{D6D74857-DD1C-4895-991E-F958CB02BD13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindServiceHistoryAPI", "WindServiceHistoryAPI\WindServiceHistoryAPI.csproj", "{5271211E-2D74-4DE1-93A0-1494D4BFA2E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindServiceHistoryAPI", "WindServiceHistoryAPI\WindServiceHistoryAPI.csproj", "{5271211E-2D74-4DE1-93A0-1494D4BFA2E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindServicePowerAPI", "WindServicePowerAPI\WindServicePowerAPI.csproj", "{B2AC6218-7F4B-46E8-AA1A-5734622AC421}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindServicePowerAPI", "WindServicePowerAPI\WindServicePowerAPI.csproj", "{B2AC6218-7F4B-46E8-AA1A-5734622AC421}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppWebJobPower", "ConsoleAppWebJobPower\ConsoleAppWebJobPower.csproj", "{4694AEBF-1CA2-4FC3-A72B-63E28C47CE64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppWebJobPower", "ConsoleAppWebJobPower\ConsoleAppWebJobPower.csproj", "{4694AEBF-1CA2-4FC3-A72B-63E28C47CE64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppWebJobHistory", "ConsoleAppWebJobHistory\ConsoleAppWebJobHistory.csproj", "{1BC32A7E-7D6F-4C61-AF07-C87A9D2825D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +117,10 @@ Global
 		{4694AEBF-1CA2-4FC3-A72B-63E28C47CE64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4694AEBF-1CA2-4FC3-A72B-63E28C47CE64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4694AEBF-1CA2-4FC3-A72B-63E28C47CE64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC32A7E-7D6F-4C61-AF07-C87A9D2825D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC32A7E-7D6F-4C61-AF07-C87A9D2825D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC32A7E-7D6F-4C61-AF07-C87A9D2825D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC32A7E-7D6F-4C61-AF07-C87A9D2825D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +141,7 @@ Global
 		{5271211E-2D74-4DE1-93A0-1494D4BFA2E3} = {D6D74857-DD1C-4895-991E-F958CB02BD13}
 		{B2AC6218-7F4B-46E8-AA1A-5734622AC421} = {D6D74857-DD1C-4895-991E-F958CB02BD13}
 		{4694AEBF-1CA2-4FC3-A72B-63E28C47CE64} = {D6D74857-DD1C-4895-991E-F958CB02BD13}
+		{1BC32A7E-7D6F-4C61-AF07-C87A9D2825D1} = {D6D74857-DD1C-4895-991E-F958CB02BD13}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CD53A110-FA3A-4E27-A98C-7B23AD0D0730}

@@ -17,8 +17,8 @@ namespace ConsoleAppWebJobPower
     {
 
 
-        Thread checkForNewGenerators_Thread;
-        TimeSpan checkForNewGenerators_Thread_SleepTime = new TimeSpan(1, 0, 0);
+      //  Thread checkForNewGenerators_Thread;
+      //  TimeSpan checkForNewGenerators_Thread_SleepTime = new TimeSpan(1, 0, 0);
 
         bool _stop = false;
 
@@ -30,8 +30,9 @@ namespace ConsoleAppWebJobPower
         public PowerService()
         {
             #region apis
-            connectionString = "Data Source=tcp:wind-service-database2.database.windows.net,1433;Initial Catalog=WindServiceWebAPI_db;User Id=tmp@wind-service-database2;Password=SuperAdmin!1";
+            // connectionString = "Data Source=tcp:wind-service-database2.database.windows.net,1433;Initial Catalog=WindServiceWebAPI_db;User Id=tmp@wind-service-database2;Password=SuperAdmin!1";
 
+            connectionString = "Server=DESKTOP-H4344E1\\SQLEXPRESS;Database=wind-service-database2;Trusted_Connection=True;MultipleActiveResultSets=true";
             api_key = "a2a055dbb982179b05c3eb6481fbb9db";
             #endregion
             ApiHelper.InitializeClient(api_key);
@@ -43,8 +44,6 @@ namespace ConsoleAppWebJobPower
 
 
         }
-
-
         public void OnDebug()
         {
             Console.WriteLine("OnDebug");
@@ -52,7 +51,7 @@ namespace ConsoleAppWebJobPower
 
 
             OnStart();
-            System.Threading.Thread.CurrentThread.Join();
+       //    System.Threading.Thread.CurrentThread.Join();
         }
         public void GetConfig()
         {
@@ -81,20 +80,17 @@ namespace ConsoleAppWebJobPower
                 }
             }
         }
-
-
         private void OnStart()
         {
 
-            this.Debug_Test($"nOnStart service.\n ");
+            //this.Debug_Test($"nOnStart service.\n ");
             Console.WriteLine("OnStart");
             StartProcesses();
         }
-
         private void OnStop()
         {
             string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            this.Debug_Test($"OnStop service, {dateStr}.\n");
+            //this.Debug_Test($"OnStop service, {dateStr}.\n");
 
             StopProcesses();
         }
@@ -103,7 +99,7 @@ namespace ConsoleAppWebJobPower
         private void StopProcesses()
         {
             string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            this.Debug_Test($"StopProcesses service, {dateStr}.\n");
+            //this.Debug_Test($"StopProcesses service, {dateStr}.\n");
             _stop = true;
         }
 
@@ -111,8 +107,10 @@ namespace ConsoleAppWebJobPower
         {
             _stop = false;
             Console.WriteLine("StartProcesses");
-            checkForNewGenerators_Thread = new Thread(new ThreadStart(CheckForNewGenerators));
-            checkForNewGenerators_Thread.Start();
+            //checkForNewGenerators_Thread = new Thread(new ThreadStart(CheckForNewGenerators));
+            //checkForNewGenerators_Thread.Start();
+
+            CheckForNewGenerators();
         }
 
         //Threads functions
@@ -133,7 +131,7 @@ namespace ConsoleAppWebJobPower
                     try
                     {
                         var tmpWindGenerators = GetWindGenerators();
-                        Console.WriteLine($"tmpWindGenerators {tmpWindGenerators.Count}");
+                        //Console.WriteLine($"tmpWindGenerators {tmpWindGenerators.Count}");
                         if (tmpWindGenerators != null)
                         {
 
@@ -146,14 +144,15 @@ namespace ConsoleAppWebJobPower
                                     var type = dtoDal?.GetWindGeneratorTypeDAL()?.Get(newGenerator.ParentWindGeneratorTypeId);
                                     if (weatherModel != null)
                                     {
-                                        this.Debug_Test($"weather model CheckForNewGenerators not null");
+                                        //this.Debug_Test($"weather model CheckForNewGenerators not null");
                                         var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed, type.Value.PowerOfTurbines);
                                         newGenerator.ValueDec = (decimal)wind_power;
                                         newGenerator.ValueStr = wind_power.ToString();
+                                        newGenerator.AdditionalJsonData = weatherModel.Daily[0].Wind_Speed.ToString();
                                         newGenerator.TimeCreated = DateTime.UtcNow;
 
                                         var successful = Update_WindGenerator_CurrentPower(newGenerator);
-                                        this.Debug_Test($"update active generator CheckForNewGenerators ,{successful}");
+                                        //this.Debug_Test($"update active generator CheckForNewGenerators ,{successful}");
 
 
                                     }
@@ -165,9 +164,9 @@ namespace ConsoleAppWebJobPower
                     catch (Exception ex)
                     {
 
-                        this.Debug_Test($"ERROR CheckForNewGenerators {ex}");
+                        //this.Debug_Test($"ERROR CheckForNewGenerators {ex}");
                     }
-                    Thread.Sleep(checkForNewGenerators_Thread_SleepTime);
+                   // Thread.Sleep(checkForNewGenerators_Thread_SleepTime);
                 }
             }
             catch (Exception ex)
@@ -190,7 +189,7 @@ namespace ConsoleAppWebJobPower
              //   Console.WriteLine($"mess {tmpGeneratorsList.Message}");
              //   Console.WriteLine($"desc {tmpGeneratorsList.MessageDescription}");
              //   Console.WriteLine($"succ {tmpGeneratorsList.Success}");
-               // this.Debug_Test($"GetWindGenerators tmpWindGenerators count: {tmpGeneratorsList?.Value?.ToList()?.Count.ToString() ?? "null"} ");
+               // //this.Debug_Test($"GetWindGenerators tmpWindGenerators count: {tmpGeneratorsList?.Value?.ToList()?.Count.ToString() ?? "null"} ");
                 if (tmpGeneratorsList != null && tmpGeneratorsList.Success && tmpGeneratorsList.Value != null)
                     return tmpGeneratorsList.Value.ToList();
 
@@ -221,12 +220,20 @@ namespace ConsoleAppWebJobPower
             try
             {
                 toRet = WeatherProcessor.LoadWeather(newGenerator.GeographicalLatitude.ToString(), newGenerator.GeographicalLongitude.ToString()).Result;
+                if(toRet == null)
+                {
+                    Console.WriteLine($"Wheater API NOT WORKING");
+                }
+                else
+                {
+                    Console.WriteLine($"Wheater API  WORKING");
+                }
+                
                 Debug_Test("GetWeatherInformationForGenerator");
             }
             catch (Exception ex)
             {
-                string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                Debug_Test($"ERROR GetWeatherInformationForGenerator {ex}");
+                Console.WriteLine($"Wheater API NOT  WORKING {ex.Message}");
             }
             return toRet;
         }
