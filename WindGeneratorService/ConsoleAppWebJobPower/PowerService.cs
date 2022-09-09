@@ -17,7 +17,8 @@ namespace ConsoleAppWebJobPower
     {
 
 
-
+        Thread checkForNewGenerators_Thread;
+        TimeSpan checkForNewGenerators_Thread_SleepTime = new TimeSpan(1, 0, 0);
 
         bool _stop = false;
 
@@ -28,13 +29,11 @@ namespace ConsoleAppWebJobPower
 
         public PowerService()
         {
-            Console.WriteLine("PowerService");
-           //   GetConfig();
-
+            #region apis
             connectionString = "Data Source=tcp:wind-service-database2.database.windows.net,1433;Initial Catalog=WindServiceWebAPI_db;User Id=tmp@wind-service-database2;Password=SuperAdmin!1";
 
             api_key = "a2a055dbb982179b05c3eb6481fbb9db";
-
+            #endregion
             ApiHelper.InitializeClient(api_key);
 
             GlobalDtoDALInstanceSelector.GetDtoDALImplementation = () =>
@@ -42,14 +41,9 @@ namespace ConsoleAppWebJobPower
                 return new DtoLocalServiceDAL(connectionString);
             };
 
-            InitializeClass();
 
         }
 
-        private void InitializeClass()
-        {
-            
-        }
 
         public void OnDebug()
         {
@@ -117,7 +111,8 @@ namespace ConsoleAppWebJobPower
         {
             _stop = false;
             Console.WriteLine("StartProcesses");
-            CheckForNewGenerators();
+            checkForNewGenerators_Thread = new Thread(new ThreadStart(CheckForNewGenerators));
+            checkForNewGenerators_Thread.Start();
         }
 
         //Threads functions
@@ -134,13 +129,11 @@ namespace ConsoleAppWebJobPower
                 {
                     Console.WriteLine("while");
                     string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                 //   this.Debug_Test($"CheckForNewGenerators, {dateStr}.\n");
 
                     try
                     {
                         var tmpWindGenerators = GetWindGenerators();
                         Console.WriteLine($"tmpWindGenerators {tmpWindGenerators.Count}");
-                   //     this.Debug_Test($"CheckForNewGenerators tmpWindGenerators count: {tmpWindGenerators?.Count.ToString() ?? "null"} ");
                         if (tmpWindGenerators != null)
                         {
 
@@ -174,6 +167,7 @@ namespace ConsoleAppWebJobPower
 
                         this.Debug_Test($"ERROR CheckForNewGenerators {ex}");
                     }
+                    Thread.Sleep(checkForNewGenerators_Thread_SleepTime);
                 }
             }
             catch (Exception ex)
