@@ -10,7 +10,7 @@
 
   //    Runs every hour (i.e. whenever the count of minutes is 0)
   //    every three hours
-      "schedule": "0 0 */3 * * *"
+  "schedule": "0 */3 * * *"
 
   //    Runs every hour from 9 AM to 5 PM
   //    "schedule": "0 0 9-17 * * *"

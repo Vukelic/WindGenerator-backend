@@ -27,7 +27,7 @@ namespace ConsoleAppWebJobHistory
         public HistoryService()
         {
             #region apis
-            connectionString = "Data Source=tcp:wind-service-database2.database.windows.net,1433;Initial Catalog=WindServiceWebAPI_db;User Id=tmp@wind-service-database2;Password=SuperAdmin!1";
+            connectionString = "Server=tcp:wind-service-database2.database.windows.net,1433;Initial Catalog=WindServiceWebAPI_db;Persist Security Info=False;User ID=tmp;Password=SuperAdmin!1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         //    connectionString = "Server=DESKTOP-H4344E1\\SQLEXPRESS;Database=wind-service-database2;Trusted_Connection=True;MultipleActiveResultSets=true";
              api_key = "f2b96f1e4f4bdd3fecced2a1e49c7a71";
             #endregion
@@ -82,8 +82,7 @@ namespace ConsoleAppWebJobHistory
         private void GetGeneratorsInfo()
         {
             ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
-            while (!_stop)
-            {
+          
 
                 string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -111,7 +110,7 @@ namespace ConsoleAppWebJobHistory
                 }
 
                // Thread.Sleep(getWindGeneratorsInfo_Thread_SleepTime);
-            }
+            
 
         }
 
