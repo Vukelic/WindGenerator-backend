@@ -17,8 +17,8 @@ namespace ConsoleAppWebJobPower
     {
 
 
-      //  Thread checkForNewGenerators_Thread;
-      //  TimeSpan checkForNewGenerators_Thread_SleepTime = new TimeSpan(1, 0, 0);
+        Thread checkForNewGenerators_Thread;
+        TimeSpan checkForNewGenerators_Thread_SleepTime = new TimeSpan(3, 0, 0);
 
         bool _stop = false;
 
@@ -107,10 +107,10 @@ namespace ConsoleAppWebJobPower
         {
             _stop = false;
             Console.WriteLine("StartProcesses");
-            //checkForNewGenerators_Thread = new Thread(new ThreadStart(CheckForNewGenerators));
-            //checkForNewGenerators_Thread.Start();
+            checkForNewGenerators_Thread = new Thread(new ThreadStart(CheckForNewGenerators));
+            checkForNewGenerators_Thread.Start();
 
-            CheckForNewGenerators();
+            //CheckForNewGenerators();
         }
 
         //Threads functions
@@ -123,7 +123,9 @@ namespace ConsoleAppWebJobPower
             {
                 ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
 
-
+                while (!_stop)
+                {
+                    Console.WriteLine($"whileee");
                     try
                     {
                         var tmpWindGenerators = GetWindGenerators();
@@ -140,7 +142,7 @@ namespace ConsoleAppWebJobPower
                                     var type = dtoDal?.GetWindGeneratorTypeDAL()?.Get(newGenerator.ParentWindGeneratorTypeId);
                                     if (weatherModel != null)
                                     {
-                                    Console.WriteLine("weatherModel not null");
+                                        Console.WriteLine("weatherModel not null");
                                         //this.Debug_Test($"weather model CheckForNewGenerators not null");
                                         var wind_power = Calculate_WindPower(weatherModel.Current.Wind_Speed, type.Value.PowerOfTurbines);
                                         newGenerator.ValueDec = (decimal)wind_power;
@@ -148,28 +150,28 @@ namespace ConsoleAppWebJobPower
                                         newGenerator.AdditionalJsonData = weatherModel.Daily[0].Wind_Speed.ToString();
                                         newGenerator.TimeCreated = DateTime.UtcNow;
 
-                                    
-                                    //this.Debug_Test($"update active generator CheckForNewGenerators ,{successful}");
+
+                                        //this.Debug_Test($"update active generator CheckForNewGenerators ,{successful}");
 
 
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("weatherModel is null");
+                                    }
+                                    var successful = Update_WindGenerator_CurrentPower(newGenerator);
                                 }
-                                else
-                                {
-                                    Console.WriteLine("weatherModel is null");
-                                }
-                                var successful = Update_WindGenerator_CurrentPower(newGenerator);
-                            }
 
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                    Console.WriteLine($"ex {ex.Message}");
-                    //this.Debug_Test($"ERROR CheckForNewGenerators {ex}");
+                        Console.WriteLine($"ex {ex.Message}");
+                        //this.Debug_Test($"ERROR CheckForNewGenerators {ex}");
+                    }
+                    Thread.Sleep(checkForNewGenerators_Thread_SleepTime);
                 }
-                   // Thread.Sleep(checkForNewGenerators_Thread_SleepTime);
-                
             }
             catch (Exception ex)
             {

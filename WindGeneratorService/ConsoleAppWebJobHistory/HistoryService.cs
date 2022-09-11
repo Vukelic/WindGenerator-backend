@@ -13,14 +13,14 @@ using System.Threading;
 
 namespace ConsoleAppWebJobHistory
 {
-   public class HistoryService
+    public class HistoryService
     {
-       // Thread getWindGeneratorsInfo_Thread;
-       // TimeSpan getWindGeneratorsInfo_Thread_SleepTime = new TimeSpan(1, 0, 0, 0, 0);
+        Thread getWindGeneratorsInfo_Thread;
+        TimeSpan getWindGeneratorsInfo_Thread_SleepTime = new TimeSpan(6, 0, 0);
 
         bool _stop = false;
 
-        
+
         string connectionString;
         string api_key;
 
@@ -28,8 +28,8 @@ namespace ConsoleAppWebJobHistory
         {
             #region apis
             connectionString = "Server=tcp:wind-service-database2.database.windows.net,1433;Initial Catalog=WindServiceWebAPI_db;Persist Security Info=False;User ID=tmp;Password=SuperAdmin!1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        //    connectionString = "Server=DESKTOP-H4344E1\\SQLEXPRESS;Database=wind-service-database2;Trusted_Connection=True;MultipleActiveResultSets=true";
-             api_key = "f2b96f1e4f4bdd3fecced2a1e49c7a71";
+            //    connectionString = "Server=DESKTOP-H4344E1\\SQLEXPRESS;Database=wind-service-database2;Trusted_Connection=True;MultipleActiveResultSets=true";
+            api_key = "f2b96f1e4f4bdd3fecced2a1e49c7a71";
             #endregion
             ApiHelper.InitializeClient(api_key);
             GlobalDtoDALInstanceSelector.GetDtoDALImplementation = () =>
@@ -44,7 +44,7 @@ namespace ConsoleAppWebJobHistory
             Console.WriteLine("OnDebug");
 
             OnStart();
-      //      System.Threading.Thread.CurrentThread.Join();
+            //      System.Threading.Thread.CurrentThread.Join();
         }
 
         private void OnStart()
@@ -72,9 +72,9 @@ namespace ConsoleAppWebJobHistory
         {
             _stop = false;
             Console.WriteLine("StartProcesses");
-            //getWindGeneratorsInfo_Thread = new Thread(new ThreadStart(GetGeneratorsInfo));
-            //getWindGeneratorsInfo_Thread.Start();
-            GetGeneratorsInfo();
+            getWindGeneratorsInfo_Thread = new Thread(new ThreadStart(GetGeneratorsInfo));
+            getWindGeneratorsInfo_Thread.Start();
+            // GetGeneratorsInfo();
         }
 
         //Threads functions
@@ -82,35 +82,37 @@ namespace ConsoleAppWebJobHistory
         private void GetGeneratorsInfo()
         {
             ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
-          
 
-                string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
+            string dateStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            while (!_stop)
+            {
+                Console.WriteLine("Whilee");
                 try
                 {
                     var tmpWindGenerators = GetWindGenerators();
-               
+
                     if (tmpWindGenerators != null)
                     {
                         foreach (var windGenerator in tmpWindGenerators)
                         {
-                           
+
                             if (windGenerator != null)
                             {
                                 var successfulHistory = Add_HistoryWindGenerator(windGenerator);
                             }
                         }
 
-                        
+
                     }
                 }
                 catch (Exception ex)
                 {
-                   
+
                 }
 
-               // Thread.Sleep(getWindGeneratorsInfo_Thread_SleepTime);
-            
+                Thread.Sleep(getWindGeneratorsInfo_Thread_SleepTime);
+            }
 
         }
 
@@ -120,7 +122,7 @@ namespace ConsoleAppWebJobHistory
             ADtoDAL dtoDal = GlobalDtoDALInstanceSelector.GetDtoDALImplementation?.Invoke();
 
             var tmpGeneratorsList = dtoDal?.GetWindGeneratorDeviceDAL()?.GetList();
-          
+
             if (tmpGeneratorsList != null && tmpGeneratorsList.Success && tmpGeneratorsList.Value != null)
                 return tmpGeneratorsList.Value.ToList();
 
