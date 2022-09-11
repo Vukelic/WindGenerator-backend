@@ -141,22 +141,27 @@ namespace WindServiceAuthWebAPI.Controllers
                
                 userDto.Password = pass;
                 userDto.TimeCreated = DateTime.UtcNow;
-                var smtpClient = new SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("lazninalogtest1@gmail.com", "hyefgvicnapzdugu"),
-                    EnableSsl = true,
-                };
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress($"{userDto.UserName}"),
-                    Subject = "Verify",
-                    Body = $"<h1>Autentication</h1><p>Your password is: {pass}. Please, login.",
-                    IsBodyHtml = true,
-                };
-                 mailMessage.To.Add($"{userDto.UserName}");
 
-                smtpClient.Send(mailMessage);
+                Task.Run(() =>
+                {
+                    var smtpClient = new SmtpClient("smtp.gmail.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential("lazninalogtest1@gmail.com", "hyefgvicnapzdugu"),
+                        EnableSsl = true,
+                    };
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress($"{userDto.UserName}"),
+                        Subject = "Verify",
+                        Body = $"<h1>Autentication</h1><p>Your password is: {pass}. Please, login.",
+                        IsBodyHtml = true,
+                    };
+                    mailMessage.To.Add($"{userDto.UserName}");
+
+                    smtpClient.Send(mailMessage);
+                });
+              
                
 
                 byte[] passwordHash = null;
