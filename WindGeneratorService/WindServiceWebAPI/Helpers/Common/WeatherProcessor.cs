@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WindServiceWebAPI.Helpers.Common.Models.CurrentWeather;
 
 namespace WindServiceWebAPI.Helpers.Common
 {
@@ -11,9 +12,8 @@ namespace WindServiceWebAPI.Helpers.Common
       
         public static async Task<HistoryModel> LoadHistoryWeather(string Lat, string Lon)
         {
-            //TODO:
+
             string url = $"https://history.openweathermap.org/data/2.5/aggregated/year?lat={ Lat }&lon={ Lon }&appid={ApiHelper.Api_key}";
-            //https://history.openweathermap.org/data/2.5/aggregated/year?lat=35&lon=139&appid={API key}
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
                 if (response.IsSuccessStatusCode)
@@ -25,6 +25,25 @@ namespace WindServiceWebAPI.Helpers.Common
                 else
                 {
                     throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public static async Task<WeatherModel> LoadWeather(string Lat, string Lon)
+        {
+ 
+            string url = $"https://api.openweathermap.org/data/2.5/onecall?lat={ Lat }&lon={ Lon }&units=metric&APPID={ApiHelper.Api_key}";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    WeatherModel weather = await response.Content.ReadAsAsync<WeatherModel>();
+                    return weather;
+                }
+                else
+                {
+                    return null;
                 }
             }
         }

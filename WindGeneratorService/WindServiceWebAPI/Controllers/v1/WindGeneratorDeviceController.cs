@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using WindServiceWebAPI.Helpers.Common;
+using WindServiceWebAPI.Helpers.Common.Models.CurrentWeather;
 using WindServiceWebAPI.Models.CustomElectricity;
 
 namespace WindServiceWebAPI.Controllers.v1
@@ -144,6 +145,7 @@ namespace WindServiceWebAPI.Controllers.v1
                     }
                 }
                 toRet = _dtoDAL?.GetWindGeneratorDeviceDAL()?.GetList(inpaging);
+                
             }
             catch (Exception ex)
             {
@@ -231,8 +233,11 @@ namespace WindServiceWebAPI.Controllers.v1
                 ApiHelper.InitializeClient(api_key);
 
                 HistoryModel historyObject = GetHistoryWeatherInformationForGenerator(value);
+
+                WeatherModel currentWeather = GetWeatherInformationForGenerator(value);
                 double averageWindPowerForLastYear = 0.0;
                 double averagePowerOfTurbine = 0.0;
+                double currentWind = 0.0;
                 if (historyObject != null)
                 {
                     if(historyObject.result != null && historyObject.result.Count > 0)
@@ -244,6 +249,11 @@ namespace WindServiceWebAPI.Controllers.v1
 
                         averageWindPowerForLastYear = averageWindPowerForLastYear / historyObject.result.Count;
                     }
+                }
+
+                if(currentWeather != null)
+                {
+                    currentWind = currentWeather.Current.Wind_Speed;
                 }
                 averagePowerOfTurbine = Calculate_WindPower(averageWindPowerForLastYear, powerOfTurbine);
 
@@ -259,6 +269,7 @@ namespace WindServiceWebAPI.Controllers.v1
                 toRet.Success = true;
                 toRet.Profit = profit;
                 toRet.ProfitabillityIndex = index;
+                toRet.CurrentWind = currentWind;
 
             }
             catch (Exception ex)
@@ -297,6 +308,29 @@ namespace WindServiceWebAPI.Controllers.v1
             try
             {
                 toRet = WeatherProcessor.LoadHistoryWeather(newGenerator.GeographicalLatitude.ToString(), newGenerator.GeographicalLongitude.ToString()).Result;
+                if (toRet == null)
+                {
+                    Console.WriteLine($"Wheater API NOT WORKING");
+                }
+                else
+                {
+                    Console.WriteLine($"Wheater API  WORKING");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Wheater API NOT  WORKING {ex.Message}");
+            }
+            return toRet;
+        }
+
+        private WeatherModel GetWeatherInformationForGenerator(DtoWindGeneratorDevice newGenerator)
+        {
+            WeatherModel toRet = null;
+            try
+            {
+                toRet = WeatherProcessor.LoadWeather(newGenerator.GeographicalLatitude.ToString(), newGenerator.GeographicalLongitude.ToString()).Result;
                 if (toRet == null)
                 {
                     Console.WriteLine($"Wheater API NOT WORKING");
