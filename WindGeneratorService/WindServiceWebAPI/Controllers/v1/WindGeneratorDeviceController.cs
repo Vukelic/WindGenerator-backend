@@ -12,7 +12,9 @@ using DtoServiceDAL.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using WindServiceWebAPI.Helpers.Common;
 using WindServiceWebAPI.Models.CustomElectricity;
 
 namespace WindServiceWebAPI.Controllers.v1
@@ -25,7 +27,8 @@ namespace WindServiceWebAPI.Controllers.v1
         private readonly IAuthorizationService _authorizationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-
+        IConfigurationRoot config;
+        string api_key;
         public WindGeneratorDeviceController(ADtoDAL dtoDAL, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
         {
             _dtoDAL = dtoDAL;
@@ -175,7 +178,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region CalculateProfit
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         [Route("CalculateProfit")]
         //POST: /api/WindGeneratorDevice/CalculateProfit
@@ -192,7 +195,7 @@ namespace WindServiceWebAPI.Controllers.v1
                     {
                         if(item.Country == value.Country)
                         {
-                            priceElectricity = Convert.ToDouble(item.Price);// * 1000;// + 0.5; //* 10;// / 100; //mWH
+                            priceElectricity = Convert.ToDouble(item.Price);
                             break;
                         }
                         else
@@ -214,21 +217,40 @@ namespace WindServiceWebAPI.Controllers.v1
                 var typeResponse = _dtoDAL?.GetWindGeneratorTypeDAL()?.Get(value.ParentWindGeneratorTypeId);
                 var globalPriceOfTurbine = 0;
                 var powerOfTurbine = 0.0;
-                var windHoursPerWay = 0.0;
+  
                 if (typeResponse != null && typeResponse.Success)
                 {
                     var type = typeResponse.Value;
 
                     globalPriceOfTurbine = type.BasePrice + type.InstallationCosts;
-                    powerOfTurbine = Convert.ToDouble(type.PowerOfTurbines); //max power of turbines in MW
-                    windHoursPerWay = Convert.ToDouble(type.GeneratorPower); //per day
+                    powerOfTurbine = Convert.ToDouble(type.PowerOfTurbines); //max power of turbines in W
                 }
 
-                var dailyConsumptionOfTurbines = (powerOfTurbine * windHoursPerWay); //potrosnja turbine po danu
+                GetConfig();
 
-                var epsConsumtionDaily = priceElectricity * dailyConsumptionOfTurbines; // last ten years eps
+                ApiHelper.InitializeClient(api_key);
 
-                var epsConsumtion20Years = epsConsumtionDaily * 200 * 20;
+                HistoryModel historyObject = GetHistoryWeatherInformationForGenerator(value);
+                double averageWindPowerForLastYear = 0.0;
+                double averagePowerOfTurbine = 0.0;
+                if (historyObject != null)
+                {
+                    if(historyObject.result != null && historyObject.result.Count > 0)
+                    {
+                        for (int i = 0; i < historyObject.result.Count; i++)
+                        {
+                            averageWindPowerForLastYear += historyObject.result[i].wind.mean;
+                        }
+
+                        averageWindPowerForLastYear = averageWindPowerForLastYear / historyObject.result.Count;
+                    }
+                }
+                averagePowerOfTurbine = Calculate_WindPower(averageWindPowerForLastYear, powerOfTurbine);
+
+                var yearConsumptionOfTurbines = (averagePowerOfTurbine * averageWindPowerForLastYear); //proizvodnja kW/h turbine za godinu dana 
+
+                var epsConsumtion20Years = priceElectricity * yearConsumptionOfTurbines * 20; // for 20 years eps
+
                  //globalna cena turbine globalPriceOfTurbine
                 var profit = epsConsumtion20Years - globalPriceOfTurbine;
 
@@ -266,6 +288,87 @@ namespace WindServiceWebAPI.Controllers.v1
             return toRet;
         }
 
-      
+        private HistoryModel GetHistoryWeatherInformationForGenerator(DtoWindGeneratorDevice newGenerator)
+        {
+            HistoryModel toRet = null;
+            try
+            {
+                toRet = WeatherProcessor.LoadHistoryWeather(newGenerator.GeographicalLatitude.ToString(), newGenerator.GeographicalLongitude.ToString()).Result;
+                if (toRet == null)
+                {
+                    Console.WriteLine($"Wheater API NOT WORKING");
+                }
+                else
+                {
+                    Console.WriteLine($"Wheater API  WORKING");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Wheater API NOT  WORKING {ex.Message}");
+            }
+            return toRet;
+        }
+        public void GetConfig()
+        {
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            config = builder.Build();
+            if (config != null)
+            {
+                try
+                {
+                   
+                    var web_api = config.GetSection("Api_id");
+                    if (!string.IsNullOrEmpty(web_api.Value))
+                    {
+                        api_key = web_api.Value;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        private double Calculate_WindPower(double Wind_Speed, double power)
+        {
+            //m/s
+            double toRet = 0;
+            double p_normal = power;
+            const double ro = 1.293;
+            const double A = 80;
+
+            if (Wind_Speed < 3)
+            {
+                toRet = 0;
+            }
+            else if (Wind_Speed >= 3 && Wind_Speed <= 10)
+            {
+                var v3 = Math.Pow(Wind_Speed, 3);
+                toRet = (0.5 * A * ro * v3); //to W
+            }
+            else if (Wind_Speed >= 10 && Wind_Speed <= 20)
+            {
+                toRet = p_normal;
+            }
+            else if (Wind_Speed >= 20)
+            {
+                toRet = p_normal;
+            }
+            else
+            {
+                // default value 0
+            }
+
+            if (toRet > p_normal) {
+                toRet = p_normal;
+            }           
+
+            toRet = Math.Round(toRet, 2);
+            return toRet;
+        }
     }
 }

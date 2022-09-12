@@ -273,6 +273,11 @@ namespace ConsoleAppWebJobPower
                 // default value 0
             }
 
+            if (toRet > p_normal)
+            {
+                toRet = p_normal;
+            }
+
             toRet = Math.Round(toRet, 2);
             return toRet;
         }
