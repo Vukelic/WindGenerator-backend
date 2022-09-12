@@ -200,7 +200,7 @@ namespace WindServiceWebAPI.Controllers.v1
                         }
                         else
                         {
-                            priceElectricity = 0.5;// / 100; //mWH
+                            priceElectricity = 0.05;
                         
                         }
                     }
