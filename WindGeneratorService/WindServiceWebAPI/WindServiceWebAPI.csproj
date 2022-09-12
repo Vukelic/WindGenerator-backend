@@ -23,5 +23,11 @@
     <ProjectReference Include="..\WindService_WindowsService\WindService_WindowsService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="allData.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>

@@ -178,7 +178,7 @@ namespace WindServiceWebAPI.Controllers.v1
         #endregion
 
         #region CalculateProfit
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("CalculateProfit")]
         //POST: /api/WindGeneratorDevice/CalculateProfit
@@ -253,14 +253,17 @@ namespace WindServiceWebAPI.Controllers.v1
 
                  //globalna cena turbine globalPriceOfTurbine
                 var profit = epsConsumtion20Years - globalPriceOfTurbine;
+                var index = (profit / (20 * 12));
 
+                if(profit < 0) { profit = 0; index = 0; }
                 toRet.Success = true;
                 toRet.Profit = profit;
-                toRet.ProfitabillityIndex = (profit / (20*12));
+                toRet.ProfitabillityIndex = index;
 
             }
             catch (Exception ex)
             {
+                toRet.Message = ex.Message;
                 toRet.Success = false;
             }
             return toRet;

@@ -11,5 +11,7 @@ namespace DtoModel.DtoResponseObjectModels.Profit
         public double ProfitabillityIndex { get; set; }
 
         public double Profit { get; set; }
+
+        public string Message { get; set; }
     }
 }

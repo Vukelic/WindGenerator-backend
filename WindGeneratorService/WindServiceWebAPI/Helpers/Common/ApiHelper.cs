@@ -11,14 +11,14 @@ namespace WindServiceWebAPI.Helpers.Common
     {
         public static HttpClient ApiClient { get; set; }
         public static string Api_key { get; set; }
-        public static void InitializeClient(string apiKey)
+        public static void InitializeClient(string apikey)
         {
             ApiClient = new HttpClient();
 
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            Api_key = apiKey;
+            Api_key = apikey;
 
         }
     }
