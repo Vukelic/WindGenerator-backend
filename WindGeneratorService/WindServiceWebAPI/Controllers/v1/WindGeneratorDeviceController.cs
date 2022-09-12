@@ -220,7 +220,7 @@ namespace WindServiceWebAPI.Controllers.v1
                     var type = typeResponse.Value;
 
                     globalPriceOfTurbine = type.BasePrice + type.InstallationCosts;
-                    powerOfTurbine = Convert.ToDouble(type.PowerOfTurbines); //power of turbines in MW
+                    powerOfTurbine = Convert.ToDouble(type.PowerOfTurbines); //max power of turbines in MW
                     windHoursPerWay = Convert.ToDouble(type.GeneratorPower); //per day
                 }
 

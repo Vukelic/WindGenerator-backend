@@ -258,7 +258,7 @@ namespace ConsoleAppWebJobPower
             else if (Wind_Speed >= 3 && Wind_Speed <= 10)
             {
                 var v3 = Math.Pow(Wind_Speed, 3);
-                toRet = (0.5 * A * ro * v3) / 100; //to kw
+                toRet = (0.5 * A * ro * v3) ; //to W
             }
             else if (Wind_Speed >= 10 && Wind_Speed <= 20)
             {
